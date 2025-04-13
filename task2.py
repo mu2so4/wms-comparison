@@ -6,6 +6,7 @@ from scipy import signal
 import pathlib
 from dataclasses import dataclass
 import matplotlib.pyplot as plt
+import sys
 
 @dataclass
 class SeismicData:
@@ -60,5 +61,14 @@ def StageTwo(filename, freq2=40, freq3=50, outPic="out_fin.png", outFile="filter
 inputPath = 'filtered2.sd'
 
 if __name__ == '__main__':
-    StageTwo(inputPath)
+    # Пример: python task2.py filtered2.sd 40 50 out_fin.png filtered.segy
+    if len(sys.argv) != 6:
+        print("Usage: python task2.py <inputPath> <freq2> <freq3> <outPic> <outFile>")
+        sys.exit(1)
+    inputPath = sys.argv[1]
+    freq2 = int(sys.argv[2])
+    freq3 = int(sys.argv[3])
+    outPic = sys.argv[4]
+    outFile = sys.argv[5]
+    StageTwo(inputPath, freq2, freq3, outPic, outFile)
 

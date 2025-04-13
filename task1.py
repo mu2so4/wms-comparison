@@ -6,6 +6,7 @@ from scipy import signal
 import pathlib
 from dataclasses import dataclass
 import matplotlib.pyplot as plt
+import sys
 
 @dataclass
 class SeismicData:
@@ -52,5 +53,14 @@ def StageOne(filename='/home/mu2so4/univ/disser/hpc2c-seismics/segy/00000215_276
         pickle.dump(filtered2, f)
 
 if __name__ == '__main__':
-    StageOne()
+    # Пример: python task1.py input.sgy 15 30 20 filtered2.sd
+    if len(sys.argv) != 6:
+        print("Usage: python task1.py <filename> <f1> <f2> <freq> <outPath>")
+        sys.exit(1)
+    filename = sys.argv[1]
+    f1 = int(sys.argv[2])
+    f2 = int(sys.argv[3])
+    freq = int(sys.argv[4])
+    outPath = sys.argv[5]
+    StageOne(filename, f1, f2, freq, outPath)
 
