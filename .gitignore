@@ -1,0 +1,6 @@
+venv/
+*.pyc
+*.sgy
+*.segy
+*.png
+*.sd
