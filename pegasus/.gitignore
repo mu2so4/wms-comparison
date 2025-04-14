@@ -1,0 +1,5 @@
+scratch/
+output/
+submit/
+*.yml
+*.properties
