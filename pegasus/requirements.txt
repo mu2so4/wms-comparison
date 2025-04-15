@@ -1,5 +1,10 @@
-# Luigi requirements
-luigi
+# Pegasus requirements
+boto3
+GitPython
+pyjwt
+pyyaml
+s3transfer
+urllib3
 
 # Task requirements
 anyio==4.6.2.post1
