@@ -1,0 +1,6 @@
+.janis/
+.nextflow
+.nextflow.log*
+results/
+work/
+translated/
