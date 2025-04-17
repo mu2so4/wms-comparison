@@ -1,5 +1,5 @@
 # CWL parser requirements
-janis-pipeline
+janis-pipelines
 
 # Task requirements
 anyio==4.6.2.post1
