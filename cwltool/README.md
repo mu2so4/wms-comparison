@@ -26,7 +26,7 @@
 1. Установка (Ubuntu/Debian):
 ```bash
 sudo apt-get install cwltool
-python3 -m venv cwltool-venv
+python3.11 -m venv cwltool-venv
 source cwltool-venv/bin/activate
 pip install -r requirements.txt
 ```

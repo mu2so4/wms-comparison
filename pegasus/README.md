@@ -32,7 +32,7 @@ curl -fsSL https://get.htcondor.org | sudo /bin/bash -s -- --no-dry-run
 
 Создание виртуального окружения:
 ```bash
-python3 -m venv pegasus-venv
+python3.11 -m venv pegasus-venv
 source pegasus-venv/bin/activate
 pip install -r requirements.txt
 ```
@@ -49,7 +49,7 @@ pip install -r requirements.txt
 
 Далее:
 ```bash
-python3 workflow_generator.py
+python3.11 workflow_generator.py
 ```
 
 В результате будут созданы следующие файлы:

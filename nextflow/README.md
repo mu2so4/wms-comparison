@@ -31,7 +31,7 @@ sudo mv nextflow /usr/local/bin/
 
 ### 📦 Подготовка окружения
 ```bash
-python3 -m venv nextflow-venv
+python3.11 -m venv nextflow-venv
 source nextflow-venv/bin/activate
 pip install -r requirements.txt
 ```

@@ -18,7 +18,7 @@
 
 1. Создайте виртуальное окружение:
 ```bash
-python3 -m venv luigi-venv
+python3.11 -m venv luigi-venv
 source luigi-venv/bin/activate
 ```
 

@@ -12,7 +12,7 @@
 
 ### 📦 Установка
 ```bash
-python3 -m venv dask-venv
+python3.11 -m venv dask-venv
 source dask-venv/bin/activate
 pip install -r requirements.txt
 ```
