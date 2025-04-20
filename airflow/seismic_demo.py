@@ -1,9 +1,8 @@
-#!/usr/bin/env python3
 from cwl_airflow.extensions.cwldag import CWLDAG
 
 default_args = {
     "params": {
-        "job_file": "PARAM_PATH"
+        "job": "PARAM_PATH"
     }
 }
 

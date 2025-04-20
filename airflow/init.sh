@@ -56,4 +56,15 @@ touch $INIT_FILE
 set +x
 set +e
 
-echo "Apache Airflow with CWL-Airflow initialization complete successfully!"
+echo "Apache Airflow and CWL-Airflow initialized successfully!"
+echo
+echo "To deploy Apache Airflow, do this:"
+echo "In terminal 1:"
+echo "source $VENV_PATH/bin/activate"
+echo "airflow scheduler"
+echo
+echo "In terminal 2:"
+echo "source $VENV_PATH/bin/activate"
+echo "airflow webserver"
+echo
+echo "Now you can open Airflow at localhost:8080"
