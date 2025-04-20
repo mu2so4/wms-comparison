@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 from cwl_airflow.extensions.cwldag import CWLDAG
+
+default_args = {
+    "params": {
+        "job_file": "PARAM_PATH"
+    }
+}
+
 dag = CWLDAG(
-    workflow="/home/mu2so4/univ/disser/cwl-pure/cwltool/main.cwl",
-    dag_id="seismic"
+    workflow="WORKFLOW_PATH",
+    dag_id="seismic",
+    default_args=default_args
 )

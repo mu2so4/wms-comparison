@@ -1,1 +1,3 @@
 init-complete
+*.cwl
+*.yml
