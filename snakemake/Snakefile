@@ -1,0 +1,53 @@
+# Snakefile для запуска рабочего процесса, эквивалентного workflow.cwl
+
+# Загрузка параметров из YAML файла
+configfile: "../cwltool/params.yml"
+
+# Определение целевых файлов рабочего процесса
+# Это файлы, которые Snakemake попытается создать по умолчанию
+rule all:
+    input:
+        config['out_pic'],  # Соответствует out_pic из params.yml / final_image из CWL
+        config['out_segy'] # Соответствует out_segy из params.yml / final_segy из CWL
+
+# Правило для первого шага (эквивалент CWL stage1)
+rule stage1:
+    input:
+        # Входной файл берется из конфигурации
+        inp_file = config['inpFile']
+    output:
+        # Выходной файл берется из конфигурации (out_stage1)
+        config['out_stage1']
+    shell:
+        # Выполнение Python скрипта task1.py с позиционными аргументами
+        # {input.inp_file} - путь к входному файлу
+        # {config[f1]}, {config[f2]}, {config[freq]} - параметры из конфигурации
+        # {output} - путь к выходному файлу этого правила
+        "python ../task1.py "
+        "{input.inp_file} "
+        "{config[f1]} "
+        "{config[f2]} "
+        "{config[freq]} "
+        "{output}"
+
+# Правило для второго шага (эквивалент CWL stage2)
+rule stage2:
+    input:
+        # Входной файл - это выходной файл правила stage1
+        stage1_output = config['out_stage1']
+    output:
+        # Два выходных файла, имена которых берутся из конфигурации
+        pic = config['out_pic'],  # Выходной файл изображения
+        segy = config['out_segy'] # Выходной segy файл
+    shell:
+        # Выполнение Python скрипта task2.py с позиционными аргументами
+        # {input.stage1_output} - путь к входному файлу (выход stage1)
+        # {config[freq2]}, {config[freq3]} - параметры из конфигурации
+        # {output.pic} - путь к первому выходному файлу этого правила (изображение)
+        # {output.segy} - путь ко второму выходному файлу этого правила (segy)
+        "python ../task2.py "
+        "{input.stage1_output} "
+        "{config[freq2]} "
+        "{config[freq3]} "
+        "{output.pic} "
+        "{output.segy}"
