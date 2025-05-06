@@ -1,0 +1,11 @@
+{
+  "inpFile": "/home/mu2so4/univ/disser/hpc2c-seismics/segy/00000215_276_22_14.18.0.sgy",
+  "f1": 15,
+  "f2": 30,
+  "freq": 20,
+  "freq2": 40,
+  "freq3": 50,
+  "out_stage1": "filtered2.sd",
+  "out_pic": "out_fin.png",
+  "out_segy": "filtered.segy"
+}
