@@ -4,5 +4,6 @@
 *.segy
 *.png
 *.sd
+*.sif
 lockfile
 time*.txt
