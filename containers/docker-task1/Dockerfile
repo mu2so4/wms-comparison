@@ -11,5 +11,5 @@ COPY task1.py requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Команда по умолчанию для запуска скрипта
-ENTRYPOINT ["python", "task1.py"]
+ENTRYPOINT ["python", "/app/task1.py"]
 
