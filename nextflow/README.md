@@ -18,23 +18,14 @@
 ### 📦 Установка Nextflow
 [Документация по установке](https://www.nextflow.io/docs/latest/install.html)
 
-```bash
-curl -s https://get.nextflow.io | bash
+**Required Python version: 3.11**
+1. Ensure you are in the fireworks directory, which contains the init.sh script.
+2. Run the installation (`sudo` required):
+```
+./init.sh
 ```
 
-После этого в текущей директории появится исполняемый файл `nextflow`. Рекомендуется переместить его в папку, входящую в `$PATH`, например:
-```bash
-sudo mv nextflow /usr/local/bin/
-```
-
----
-
-### 📦 Подготовка окружения
-```bash
-python3.11 -m venv nextflow-venv
-source nextflow-venv/bin/activate
-pip install -r requirements.txt
-```
+This will set up a virtual environment `.nextflow-venv`, install Nextflow and its dependencies (including Janise) and convert the CWL into Nextflow format.
 
 ---
 
@@ -52,6 +43,8 @@ pip install -r requirements.txt
 # Из папки nextflow/
 janis translate --from cwl --to nextflow ../cwltool/main.cwl
 ```
+
+Конвертация тестового Workflow уже включена в `init.sh`.
 
 ### 📂 Полученная структура
 ```
