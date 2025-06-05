@@ -1,2 +1,2 @@
 fireworks[mongomock]==2.0.4
-pytest
+pytest==8.3.5
