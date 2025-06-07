@@ -6,7 +6,9 @@ requirements:
   InlineJavascriptRequirement: {}
 
 inputs:
-  inpFile: string
+  script1: File
+  script2: File
+  inpFile: File
   f1: int
   f2: int
   freq: int
@@ -28,6 +30,7 @@ steps:
   stage1:
     run: task1.cwl
     in:
+      script: script1
       inpFile: inpFile
       f1: f1
       f2: f2
@@ -38,6 +41,7 @@ steps:
   stage2:
     run: task2.cwl
     in:
+      script: script2
       filename: stage1/filtered_data
       freq2: freq2
       freq3: freq3

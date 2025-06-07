@@ -6,7 +6,9 @@ requirements:
   InlineJavascriptRequirement: {}
 
 inputs:
-  inpFile: string
+  script1: File
+  script2: File
+  inpFile: File
   f1: int
   f2: int
   freq: int
@@ -33,29 +35,31 @@ steps:
       baseCommand: python
 
       inputs:
-        inpFile:
-          type: string
+        script:
+          type: File
           inputBinding:
             position: 1
+        inpFile:
+          type: File
+          inputBinding:
+            position: 2
         f1:
           type: int
           inputBinding:
-            position: 2
+            position: 3
         f2:
           type: int
           inputBinding:
-            position: 3
+            position: 4
         freq:
           type: int
           inputBinding:
-            position: 4
+            position: 5
         outPath:
           type: string
           default: filtered2.sd
           inputBinding:
-            position: 5
-
-      arguments: [/home/mu2so4/univ/disser/cwl-pure/task1.py]
+            position: 6
 
       outputs:
         filtered_data:
@@ -65,6 +69,7 @@ steps:
 
       stdout: stdout.txt
     in:
+      script: script1
       inpFile: inpFile
       f1: f1
       f2: f2
@@ -80,28 +85,30 @@ steps:
       baseCommand: python
 
       inputs:
-        filename:
+        script:
           type: File
           inputBinding:
             position: 1
+        filename:
+          type: File
+          inputBinding:
+            position: 2
         freq2:
           type: int
           inputBinding:
-            position: 2
+            position: 3
         freq3:
           type: int
           inputBinding:
-            position: 3
+            position: 4
         outPic:
           type: string
           inputBinding:
-            position: 4
+            position: 5
         outFile:
           type: string
           inputBinding:
-            position: 5
-
-      arguments: [/home/mu2so4/univ/disser/cwl-pure/task2.py]
+            position: 6
 
       outputs:
         out_pic:
@@ -115,6 +122,7 @@ steps:
 
       stdout: stdout.txt
     in:
+      script: script2
       filename: stage1/filtered_data
       freq2: freq2
       freq3: freq3

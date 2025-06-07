@@ -5,28 +5,30 @@ class: CommandLineTool
 baseCommand: python
 
 inputs:
-  filename:
+  script:
     type: File
     inputBinding:
       position: 1
+  filename:
+    type: File
+    inputBinding:
+      position: 2
   freq2:
     type: int
     inputBinding:
-      position: 2
+      position: 3
   freq3:
     type: int
     inputBinding:
-      position: 3
+      position: 4
   outPic:
     type: string
     inputBinding:
-      position: 4
+      position: 5
   outFile:
     type: string
     inputBinding:
-      position: 5
-
-arguments: [/home/mu2so4/univ/disser/cwl-pure/task2.py]
+      position: 6
 
 outputs:
   out_pic:

@@ -5,29 +5,31 @@ class: CommandLineTool
 baseCommand: python
 
 inputs:
-  inpFile:
-    type: string
+  script:
+    type: File
     inputBinding:
       position: 1
+  inpFile:
+    type: File
+    inputBinding:
+      position: 2
   f1:
     type: int
     inputBinding:
-      position: 2
+      position: 3
   f2:
     type: int
     inputBinding:
-      position: 3
+      position: 4
   freq:
     type: int
     inputBinding:
-      position: 4
+      position: 5
   outPath:
     type: string
     default: filtered2.sd
     inputBinding:
-      position: 5
-
-arguments: [/home/mu2so4/univ/disser/cwl-pure/task1.py]
+      position: 6
 
 outputs:
   filtered_data:
