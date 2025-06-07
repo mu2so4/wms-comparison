@@ -2,7 +2,7 @@
 
 set -e
 
-source cwltool-venv/bin/activate
+source ../cwltool-venv/bin/activate
 
 ITERATION_COUNT=15
 TIMEFORMAT=%3R
@@ -28,4 +28,4 @@ sed "s#,#.#g" $OUT_FILE > time.txt
 
 rm $OUT_FILE
 
-python ../stats.py time.txt
+python ../../stats.py time.txt
