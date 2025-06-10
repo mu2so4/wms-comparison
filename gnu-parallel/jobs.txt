@@ -1,0 +1,1 @@
+./task1.sh && ./task2.sh
