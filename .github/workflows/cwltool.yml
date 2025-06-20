@@ -1,0 +1,56 @@
+name: Test cwltool (CWL reference implementation) Run
+
+on:
+  push:
+    branches:
+      - main
+      - feature/*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-matrix:
+    name: Run ${{ matrix.env_type }} Workflow
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env_type: [native, docker, apptainer]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up Apptainer
+        if: matrix.env_type == 'apptainer'
+        uses: eWaterCycle/setup-apptainer@v2
+        with:
+          apptainer-version: 1.3.6
+
+      - name: Download input seismic file
+        run: |
+          mkdir -p inputs
+          curl -L --insecure -o inputs/input.sgy https://hu-cloud.sscc.ru/index.php/s/cyGHnWZsb5FEJQj/download/00000215_276_22_14.18.0.sgy
+
+      - name: Run native workflow
+        if: matrix.env_type == 'native'
+        run: |
+          chmod +x cwltool/init.sh cwltool/run.sh
+          ./cwltool/run.sh
+
+      - name: Run Docker workflow
+        if: matrix.env_type == 'docker'
+        run: |
+          chmod +x cwltool/init.sh cwltool/run-docker.sh
+          ./cwltool/run-docker.sh
+
+      - name: Run Apptainer workflow
+        if: matrix.env_type == 'apptainer'
+        run: |
+          chmod +x cwltool/init.sh cwltool/run-singularity.sh
+          ./cwltool/run-singularity.sh
