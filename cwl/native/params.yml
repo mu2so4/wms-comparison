@@ -1,12 +1,12 @@
 script1:
   class: File
-  path: ../src/task1.py
+  path: ../../src/task1.py
 script2:
   class: File
-  path: ../src/task2.py
+  path: ../../src/task2.py
 inpFile:
   class: File
-  path: ../inputs/input.sgy
+  path: ../../inputs/input.sgy
 f1: 15
 f2: 30
 freq: 20

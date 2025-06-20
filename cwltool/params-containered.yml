@@ -1,9 +1,3 @@
-script1:
-  class: File
-  path: ../src/task1.py
-script2:
-  class: File
-  path: ../src/task2.py
 inpFile:
   class: File
   path: ../inputs/input.sgy
