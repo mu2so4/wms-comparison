@@ -30,6 +30,7 @@ jobs:
         with:
           name: seismic-input
           path: inputs/input.sgy
+          retention-days: 7
 
   native:
     name: Native (venv) run
