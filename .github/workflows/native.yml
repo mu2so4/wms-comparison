@@ -10,48 +10,84 @@ on:
       - main
 
 jobs:
-  test-matrix:
-    name: Run ${{ matrix.env_type }} Workflow
+  download-data:
+    name: Prepare seismic data
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env_type: [native, docker, apptainer]
-
+    outputs:
+      cache-key: ${{ steps.set-key.outputs.cache-key }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Set output key
+        id: set-key
+        run: echo "cache-key=seismic-input-cache" >> $GITHUB_OUTPUT
 
-      - name: Set up Python 3.11
-        if: matrix.env_type == 'native'
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Set up Apptainer
-        if: matrix.env_type == 'apptainer'
-        uses: eWaterCycle/setup-apptainer@v2
-        with:
-          apptainer-version: 1.3.6
-
-      - name: Download input seismic file
+      - name: Download seismic input file
         run: |
           mkdir -p inputs
           curl -L --insecure -o inputs/input.sgy https://hu-cloud.sscc.ru/index.php/s/cyGHnWZsb5FEJQj/download/00000215_276_22_14.18.0.sgy
 
+      - name: Save to workspace
+        uses: actions/upload-artifact@v4
+        with:
+          name: seismic-input
+          path: inputs/input.sgy
+
+  native:
+    name: Native (venv) run
+    needs: download-data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: seismic-input
+          path: inputs
+
       - name: Run native workflow
-        if: matrix.env_type == 'native'
         run: |
           chmod +x pure/init.sh pure/run.sh
+          ./pure/init.sh
           ./pure/run.sh
 
+  docker:
+    name: Docker run
+    needs: download-data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: seismic-input
+          path: inputs
+
       - name: Run Docker workflow
-        if: matrix.env_type == 'docker'
         run: |
           chmod +x pure/run-docker.sh
           ./pure/run-docker.sh
 
+  apptainer:
+    name: Apptainer run
+    needs: download-data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: seismic-input
+          path: inputs
+
+      - uses: eWaterCycle/setup-apptainer@v2
+        with:
+          apptainer-version: 1.3.6
+
       - name: Run Apptainer workflow
-        if: matrix.env_type == 'apptainer'
         run: |
           chmod +x pure/run-singularity.sh
           ./pure/run-singularity.sh
+

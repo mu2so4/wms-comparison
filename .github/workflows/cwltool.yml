@@ -10,47 +10,86 @@ on:
       - main
 
 jobs:
-  test-matrix:
-    name: Run ${{ matrix.env_type }} Workflow
+  download-data:
+    name: Prepare seismic data
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env_type: [native, docker, apptainer]
-
+    outputs:
+      cache-key: ${{ steps.set-key.outputs.cache-key }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Set output key
+        id: set-key
+        run: echo "cache-key=seismic-input-cache" >> $GITHUB_OUTPUT
 
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Set up Apptainer
-        if: matrix.env_type == 'apptainer'
-        uses: eWaterCycle/setup-apptainer@v2
-        with:
-          apptainer-version: 1.3.6
-
-      - name: Download input seismic file
+      - name: Download seismic input file
         run: |
           mkdir -p inputs
           curl -L --insecure -o inputs/input.sgy https://hu-cloud.sscc.ru/index.php/s/cyGHnWZsb5FEJQj/download/00000215_276_22_14.18.0.sgy
 
-      - name: Run native workflow
-        if: matrix.env_type == 'native'
+      - name: Save to workspace
+        uses: actions/upload-artifact@v4
+        with:
+          name: seismic-input
+          path: inputs/input.sgy
+
+  native:
+    name: CWL (native)
+    needs: download-data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: seismic-input
+          path: inputs
+
+      - name: Run CWLTool native
         run: |
           chmod +x cwltool/init.sh cwltool/run.sh
+          ./cwltool/init.sh
           ./cwltool/run.sh
 
-      - name: Run Docker workflow
-        if: matrix.env_type == 'docker'
+  docker:
+    name: CWL (Docker)
+    needs: download-data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: seismic-input
+          path: inputs
+
+      - name: Run CWLTool in Docker
         run: |
           chmod +x cwltool/init.sh cwltool/run-docker.sh
+          ./cwltool/init.sh
           ./cwltool/run-docker.sh
 
-      - name: Run Apptainer workflow
-        if: matrix.env_type == 'apptainer'
+  apptainer:
+    name: CWL (Apptainer)
+    needs: download-data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: seismic-input
+          path: inputs
+
+      - uses: eWaterCycle/setup-apptainer@v2
+        with:
+          apptainer-version: 1.3.6
+
+      - name: Run CWLTool in Apptainer
         run: |
           chmod +x cwltool/init.sh cwltool/run-singularity.sh
+          ./cwltool/init.sh
           ./cwltool/run-singularity.sh
+
