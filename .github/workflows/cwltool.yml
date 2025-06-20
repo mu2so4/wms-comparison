@@ -31,40 +31,13 @@ jobs:
           name: seismic-input
           path: inputs/input.sgy
           retention-days: 7
-          
-  install-cwltool:
-    name: Installing cwltool
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          
-      - name: Install CWLTool
-        run: |
-          chmod +x cwltool/init.sh
-          ./cwltool/init.sh
-
-      - name: Save Python environment
-        uses: actions/upload-artifact@v4
-        with:
-          name: cwltool-venv
-          path: cwltool/.cwltool-venv
-          retention-days: 2
 
   native:
     name: CWL (native)
-    needs: [download-data, install-cwltool]
+    needs: download-data
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - uses: actions/download-artifact@v4
-        with:
-          name: cwltool-venv
-          path: cwltool/.cwltool-venv
       
       - uses: actions/download-artifact@v4
         with:
@@ -78,15 +51,10 @@ jobs:
 
   docker:
     name: CWL (Docker)
-    needs: [download-data, install-cwltool]
+    needs: download-data
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - uses: actions/download-artifact@v4
-        with:
-          name: cwltool-venv
-          path: cwltool/.cwltool-venv
 
       - uses: actions/download-artifact@v4
         with:
@@ -100,15 +68,10 @@ jobs:
 
   apptainer:
     name: CWL (Apptainer)
-    needs: [download-data, install-cwltool]
+    needs: download-data
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - uses: actions/download-artifact@v4
-        with:
-          name: cwltool-venv
-          path: cwltool/.cwltool-venv
 
       - uses: actions/download-artifact@v4
         with:
