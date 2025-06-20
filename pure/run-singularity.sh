@@ -2,9 +2,12 @@
 
 cd $(dirname "$0")
 
-INPUT_PATH=$PWD/../../inputs
-TASK1_OUT=$PWD/out-task1
-TASK2_OUT=$PWD/out-task2
+INPUT_PATH=$PWD/../inputs
+TASK1_OUT=$PWD/out-singularity-task1
+TASK2_OUT=$PWD/out-singularity-task2
+
+mkdir -p $TASK1_OUT
+mkdir -p $TASK2_OUT
 
 singularity run \
     --mount type=bind,src=${INPUT_PATH},dst=/app/data,ro \

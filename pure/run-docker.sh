@@ -1,8 +1,8 @@
 #!/bin/bash
 
-INPUT_PATH=$PWD/../../inputs
-TASK1_OUT=$PWD/out-task1
-TASK2_OUT=$PWD/out-task2
+INPUT_PATH=$PWD/../inputs
+TASK1_OUT=$PWD/out-docker-task1
+TASK2_OUT=$PWD/out-docker-task2
 
 docker run \
     -v ${INPUT_PATH}:/app/data \

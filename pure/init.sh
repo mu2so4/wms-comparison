@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd $(dirname "$0")
+
 LOCKFILE="lockfile"
 
 if [[ -f $LOCKFILE ]]; then

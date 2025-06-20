@@ -35,6 +35,7 @@ jobs:
 
       - name: Download input seismic file
         run: |
+          ls
           mkdir -p inputs
           curl -L --insecure -o inputs/input.sgy https://hu-cloud.sscc.ru/index.php/s/cyGHnWZsb5FEJQj/download/00000215_276_22_14.18.0.sgy
 
@@ -42,17 +43,16 @@ jobs:
         if: matrix.env_type == 'native'
         run: |
           chmod +x pure/init.sh pure/run.sh
-          ./pure/init.sh
           ./pure/run.sh
 
       - name: Run Docker workflow
         if: matrix.env_type == 'docker'
         run: |
-          chmod +x pure/docker/run.sh
-          ./pure/docker/run.sh
+          chmod +x pure/run-docker.sh
+          ./pure/run-docker.sh
 
       - name: Run Apptainer workflow
         if: matrix.env_type == 'apptainer'
         run: |
-          chmod +x pure/singularity/run.sh
-          ./pure/singularity/run.sh
+          chmod +x pure/run-singularity.sh
+          ./pure/run-singularity.sh
