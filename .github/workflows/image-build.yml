@@ -1,0 +1,93 @@
+name: Docker and Apptainer Images CI
+
+on:
+  push:
+    branches:
+      - main
+      - feature/*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  task1-docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Task1 Docker image
+      run: |
+        chmod +x images/task1/build-docker.sh
+        ./images/task1/build-docker.sh test
+
+    - name: Save Task 1 Docker image as artifact
+    run: |
+      docker save seismic-filter-task:test | gzip > task1-image.tar.gz
+      
+    - uses: actions/upload-artifact@v4
+    with:
+      name: task1-docker-image
+      path: task1-image.tar.gz
+        
+  task2-docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Task2 Docker image
+      run: |
+        chmod +x images/task2/build-docker.sh
+        ./images/task2/build-docker.sh test
+
+    - name: Save Task 2 Docker image as artifact
+    run: |
+      docker save seismic-processing-task:test | gzip > task2-image.tar.gz
+      
+    - uses: actions/upload-artifact@v4
+    with:
+      name: task2-docker-image
+      path: task2-image.tar.gz
+      
+  task1-apptainer:
+    needs: task1-docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: task1-docker-image
+
+      - name: Load Docker image
+        run: |
+        gunzip -c task1-image.tar.gz | docker load
+
+      - uses: eWaterCycle/setup-apptainer@v2
+        with:
+          apptainer-version: 1.3.6
+
+      - name: Build Apptainer image from Docker
+        run: |
+          chmod +x images/task1/build-singularity.sh
+          ./images/task1/build-singularity.sh seismic-filter-task:test
+      
+  task2-apptainer:
+    needs: task2-docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: task1-docker-image
+
+      - name: Load Docker image
+        run: |
+        gunzip -c task2-image.tar.gz | docker load
+
+      - uses: eWaterCycle/setup-apptainer@v2
+        with:
+          apptainer-version: 1.3.6
+
+      - name: Build Apptainer image from Docker
+        run: |
+          chmod +x images/task2/build-singularity.sh
+          ./images/task2/build-singularity.sh seismic-processing-task:test
