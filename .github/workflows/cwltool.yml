@@ -30,10 +30,9 @@ jobs:
         with:
           name: seismic-input
           path: inputs/input.sgy
-
-  native:
-    name: CWL (native)
-    needs: download-data
+          
+  install-cwltool:
+    name: Installing cwltool
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -41,7 +40,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          
+      - name: Install CWLTool
+        run: |
+          chmod +x cwltool/init.sh
+          ./cwltool/init.sh
 
+  native:
+    name: CWL (native)
+    needs: [download-data, install-cwltool]
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/download-artifact@v4
         with:
           name: seismic-input
@@ -49,17 +58,14 @@ jobs:
 
       - name: Run CWLTool native
         run: |
-          chmod +x cwltool/init.sh cwltool/run.sh
-          ./cwltool/init.sh
+          chmod +x cwltool/run.sh
           ./cwltool/run.sh
 
   docker:
     name: CWL (Docker)
-    needs: download-data
+    needs: [download-data, install-cwltool]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
       - uses: actions/download-artifact@v4
         with:
           name: seismic-input
@@ -67,17 +73,14 @@ jobs:
 
       - name: Run CWLTool in Docker
         run: |
-          chmod +x cwltool/init.sh cwltool/run-docker.sh
-          ./cwltool/init.sh
+          chmod +x cwltool/run-docker.sh
           ./cwltool/run-docker.sh
 
   apptainer:
     name: CWL (Apptainer)
-    needs: download-data
+    needs: [download-data, install-cwltool]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
       - uses: actions/download-artifact@v4
         with:
           name: seismic-input
@@ -89,7 +92,6 @@ jobs:
 
       - name: Run CWLTool in Apptainer
         run: |
-          chmod +x cwltool/init.sh cwltool/run-singularity.sh
-          ./cwltool/init.sh
+          chmod +x cwltool/run-singularity.sh
           ./cwltool/run-singularity.sh
 
