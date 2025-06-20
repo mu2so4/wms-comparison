@@ -1,0 +1,29 @@
+name: Docker and Apptainer Images CI
+
+on:
+  push:
+    branches:
+      - main
+      - feature/*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  task1-docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Task1 Docker image
+      run: |
+        chmod +x images/task1/docker-build.sh
+        ./images/task1/docker-build.sh
+        
+  task2-docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Task2 Docker image
+      run: |
+        chmod +x images/task2/docker-build.sh
+        ./images/task2/docker-build.sh
