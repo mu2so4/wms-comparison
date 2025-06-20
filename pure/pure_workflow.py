@@ -1,6 +1,6 @@
 import sys
 
-parent_dir = ".."
+parent_dir = "../src"
 sys.path.append(parent_dir)
 
 import task1
@@ -12,3 +12,4 @@ if __name__ == '__main__':
     task1.StageOne(outPath = intermediate_path)
     print("Running task 2")
     task2.StageTwo(intermediate_path)
+    print("Execution terminated")
