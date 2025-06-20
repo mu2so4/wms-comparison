@@ -36,7 +36,7 @@ jobs:
       - name: Download input seismic file
         run: |
           mkdir -p inputs
-          curl -L -o inputs/input.sgy https://hu-cloud.sscc.ru/index.php/s/cyGHnWZsb5FEJQj/download/00000215_276_22_14.18.0.sgy
+          curl -L --insecure -o inputs/input.sgy https://hu-cloud.sscc.ru/index.php/s/cyGHnWZsb5FEJQj/download/00000215_276_22_14.18.0.sgy
 
       - name: Run native workflow
         if: matrix.env_type == 'native'
