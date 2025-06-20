@@ -20,7 +20,7 @@ fi
 
 
 source $VENV_PATH/bin/activate
-pip install -r ../requirements.txt
+pip install -r ../requirements_min.txt
 
 touch $LOCKFILE
 

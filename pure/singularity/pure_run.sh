@@ -1,11 +1,20 @@
 #!/bin/bash
 
+set -e
+
 ITERATION_COUNT=15
 TIMEFORMAT=%R
 
 OUT_FILE=time0.txt
 
 >$OUT_FILE
+
+for ((i = 1; i <= 3; i++)); do
+    echo "IDLE iteration $i of 3"
+    ./run.sh >/dev/null
+done
+
+echo
 
 for ((i = 1; i <= $ITERATION_COUNT; i++)); do
     echo "iteration $i of $ITERATION_COUNT"
