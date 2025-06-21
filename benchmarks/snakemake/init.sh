@@ -25,6 +25,12 @@ source $VENV_PATH/bin/activate
 pip install snakemake==9.3.3
 pip install -r ../../requirements.txt
 
+INPUT_FILE=$(realpath ../../inputs/input.sgy)
+cd container
+
+sed "s#INPUT_FILE#${INPUT_FILE}#g" params-draft.yml > params.yml
+cd ..
+
 touch $LOCKFILE
 
 set +e

@@ -110,7 +110,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        wms: [native, cwltool, nextflow]
+        wms: [native, cwltool, nextflow, snakemake]
     steps:
       - uses: actions/checkout@v4
 

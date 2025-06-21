@@ -1,0 +1,52 @@
+# Snakefile
+
+# 1. Загрузка конфигурации из файла
+configfile: "params.yml"
+
+# 2. Главное правило (target rule)
+# Это правило определяет, какие финальные файлы мы хотим получить.
+# Snakemake автоматически построит граф зависимостей, чтобы создать их.
+rule all:
+    input:
+        pic=config["out_pic"],
+        segy=config["out_segy"]
+
+# 3. Правило для первого шага (stage1)
+rule stage1:
+    input:
+        inp_file = config["inpFile"]
+    output:
+        filtered = config["out_stage1"]
+    params:
+        f1 = config["f1"],
+        f2 = config["f2"],
+        freq = config["freq"]
+    singularity:
+        "docker://mu2so4/seismic-filter-task:1.0.2"
+    shell:
+        r"""
+        python /app/task1.py {input.inp_file} {params.f1} {params.f2} {params.freq} {output.filtered}
+        """
+
+# 4. Правило для второго шага (stage2)
+rule stage2:
+    input:
+        # Вход для этого правила - это выход предыдущего.
+        # Snakemake автоматически понимает эту зависимость.
+        filtered_data=config["out_stage1"]
+    output:
+        # Используем именованные выходы для удобства
+        pic=config["out_pic"],
+        segy=config["out_segy"]
+    params:
+        freq2=config["freq2"],
+        freq3=config["freq3"]
+    container:
+        "docker://mu2so4/seismic-processing-task:1.0.2"
+    #log:
+    #    "logs/stage2.log"
+    shell:
+        # Аналогично stage1, строим команду с правильным порядком аргументов.
+        # Здесь мы используем именованные выходы {output.pic} и {output.segy}.
+        "python /app/task2.py {input.filtered_data} {params.freq2} {params.freq3} {output.pic} {output.segy} " # > {log} 2>&1"
+        # Опять же, если скрипт - это ENTRYPOINT, то команда может быть проще.
