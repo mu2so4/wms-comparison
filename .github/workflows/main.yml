@@ -31,6 +31,25 @@ jobs:
           name: seismic-input
           path: inputs/input.sgy
           retention-days: 7
+          
+  install-only:
+    name: Only installation
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        wms: [airflow, dask]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install ${{ matrix.wms }} workflow
+        run: |
+          chmod +x benchmarks/${{ matrix.wms }}/init.sh
+          ./benchmarks/${{ matrix.wms }}/init.sh
 
   native:
     name: Containerless run
