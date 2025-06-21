@@ -1,15 +1,40 @@
 name: Test cwltool (CWL reference implementation) Run
 
 on:
-  workflow_run:
-    workflows: [Test Native Workflow Run (No WMS)]
-    types:
-      - completed
-    branches: [main, feature/*]
+  push:
+    branches:
+      - main
+      - feature/*
+  pull_request:
+    branches:
+      - main
 
 jobs:
+  download-data:
+    name: Prepare seismic data
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.set-key.outputs.cache-key }}
+    steps:
+      - name: Set output key
+        id: set-key
+        run: echo "cache-key=seismic-input-cache" >> $GITHUB_OUTPUT
+
+      - name: Download seismic input file
+        run: |
+          mkdir -p inputs
+          curl -L --insecure -o inputs/input.sgy https://hu-cloud.sscc.ru/index.php/s/cyGHnWZsb5FEJQj/download/00000215_276_22_14.18.0.sgy
+
+      - name: Save to workspace
+        uses: actions/upload-artifact@v4
+        with:
+          name: seismic-input
+          path: inputs/input.sgy
+          retention-days: 7
+
   native:
     name: CWL (native)
+    needs: download-data
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +55,7 @@ jobs:
 
   docker:
     name: CWL (Docker)
+    needs: download-data
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,6 +76,7 @@ jobs:
 
   apptainer:
     name: CWL (Apptainer)
+    needs: download-data
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
