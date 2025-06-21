@@ -11,7 +11,7 @@ fi
 
 set -e
 
-VENV_PATH=".pure-venv"
+VENV_PATH=".native-venv"
 
 if [ ! -d $VENV_PATH ]; then
     echo "Creating the virtual environment..."

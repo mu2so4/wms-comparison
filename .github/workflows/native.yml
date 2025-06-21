@@ -50,9 +50,9 @@ jobs:
 
       - name: Run native workflow
         run: |
-          chmod +x pure/init.sh pure/run.sh
-          ./pure/init.sh
-          ./pure/run.sh
+          chmod +x native/init.sh native/run.sh
+          ./native/init.sh
+          ./native/run.sh
 
   docker:
     name: Docker run
@@ -68,8 +68,8 @@ jobs:
 
       - name: Run Docker workflow
         run: |
-          chmod +x pure/run-docker.sh
-          ./pure/run-docker.sh
+          chmod +x native/run-docker.sh
+          ./native/run-docker.sh
 
   apptainer:
     name: Apptainer run
@@ -89,6 +89,6 @@ jobs:
 
       - name: Run Apptainer workflow
         run: |
-          chmod +x pure/run-singularity.sh
-          ./pure/run-singularity.sh
+          chmod +x native/run-singularity.sh
+          ./native/run-singularity.sh
 
