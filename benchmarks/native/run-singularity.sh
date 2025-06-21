@@ -2,7 +2,7 @@
 
 cd $(dirname "$0")
 
-INPUT_PATH=$PWD/../inputs
+INPUT_PATH=$PWD/../../inputs
 TASK1_OUT=$PWD/out-singularity-task1
 TASK2_OUT=$PWD/out-singularity-task2
 

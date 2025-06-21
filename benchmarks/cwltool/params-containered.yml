@@ -1,6 +1,6 @@
 inpFile:
   class: File
-  path: ../inputs/input.sgy
+  path: ../../inputs/input.sgy
 f1: 15
 f2: 30
 freq: 20

@@ -12,6 +12,6 @@ fi
 
 source .cwltool-venv/bin/activate
 
-cwltool ../cwl/native/workflow.cwl params.yml
+cwltool ../../cwl/containered/workflow.cwl params-containered.yml
 
 set +e

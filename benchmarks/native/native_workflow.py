@@ -1,6 +1,6 @@
 import sys
 
-parent_dir = "../src"
+parent_dir = "../../src"
 sys.path.append(parent_dir)
 
 import task1

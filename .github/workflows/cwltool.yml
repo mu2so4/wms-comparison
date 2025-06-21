@@ -50,8 +50,8 @@ jobs:
 
       - name: Run CWLTool native
         run: |
-          chmod +x cwltool/run.sh
-          ./cwltool/run.sh
+          chmod +x benchmarks/cwltool/run.sh
+          ./benchmarks/cwltool/run.sh
 
   docker:
     name: CWL (Docker)
@@ -71,8 +71,8 @@ jobs:
 
       - name: Run CWLTool in Docker
         run: |
-          chmod +x cwltool/run-docker.sh
-          ./cwltool/run-docker.sh
+          chmod +x benchmarks/cwltool/run-docker.sh
+          ./benchmarks/cwltool/run-docker.sh
 
   apptainer:
     name: CWL (Apptainer)
@@ -96,6 +96,6 @@ jobs:
 
       - name: Run CWLTool in Apptainer
         run: |
-          chmod +x cwltool/run-singularity.sh
-          ./cwltool/run-singularity.sh
+          chmod +x benchmarks/cwltool/run-singularity.sh
+          ./benchmarks/cwltool/run-singularity.sh
 
