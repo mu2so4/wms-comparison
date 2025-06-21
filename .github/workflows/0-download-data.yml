@@ -1,0 +1,27 @@
+name: Download seismic input file
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, feature/*]
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  download-input:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download seismic input file
+        run: |
+          mkdir -p inputs
+          curl -L --insecure -o inputs/input.sgy inputs/input.sgy https://hu-cloud.sscc.ru/index.php/s/cyGHnWZsb5FEJQj/download/00000215_276_22_14.18.0.sgy
+
+      - name: Download input file
+        uses: actions/upload-artifact@v4
+        with:
+          name: seismic-input
+          path: inputs/input.sgy
+          retention-days: 7
