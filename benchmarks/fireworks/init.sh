@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd $(dirname "$0")
+
 LOCKFILE="lockfile"
 
 if [[ -f $LOCKFILE ]]; then
@@ -27,13 +29,17 @@ echo MONGOMOCK_SERVERSTORE_FILE: $HOME/.fireworks/mongomock.json > ~/.fireworks/
 echo '{}' > ~/.fireworks/mongomock.json
 lpad reset --password="$(date +%Y-%m-%d)"
 
-pip install -r ../requirements.txt
+pip install -r ../../requirements.txt
 
 OUTPUT_DIR=$(realpath outputs)
-REPO_DIR=$(realpath ..)
+SRC_DIR=$(realpath ../../src)
+INPUT_FILE=$(realpath ../../inputs/input.sgy)
+
+mkdir -p $OUTPUT_DIR
 
 sed "s#OUTPUT_DIR#${OUTPUT_DIR}#g" workflow-draft.yaml | \
-    sed "s#REPO_DIR#${REPO_DIR}#g" > workflow.yaml
+    sed "s#INPUT_FILE#${INPUT_FILE}#g" | \
+    sed "s#SRC_DIR#${SRC_DIR}#g" > workflow.yaml
 
 touch $LOCKFILE
 
