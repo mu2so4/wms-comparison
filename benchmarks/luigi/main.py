@@ -1,6 +1,6 @@
 import sys
 
-parent_dir = ".."
+parent_dir = "../../src"
 sys.path.append(parent_dir)
 
 import task1
@@ -15,7 +15,7 @@ class StageOne(luigi.Task):
     f1 = luigi.IntParameter(default=15)
     f2 = luigi.IntParameter(default=60)
     freq = luigi.IntParameter(default = 20)
-    filename = luigi.Parameter(default='/home/mu2so4/univ/disser/hpc2c-seismics/segy/00000215_276_22_14.18.0.sgy')
+    filename = luigi.Parameter(default='../../inputs/input.sgy')
     outFilename = luigi.Parameter(default=filteredPath)
     
     def run(self):
