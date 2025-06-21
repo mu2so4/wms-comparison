@@ -39,7 +39,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        wms: [native, cwltool, fireworks, luigi, parsl, snakemake]
+        wms: [native, cwltool, fireworks, luigi, nextflow, parsl, snakemake]
     steps:
       - uses: actions/checkout@v4
 

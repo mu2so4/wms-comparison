@@ -1,6 +1,10 @@
+bin/
 .janis/
 .nextflow
 .nextflow.log*
 results/
 work/
 translated/
+task1.nf
+task2.nf
+nextflow.config
