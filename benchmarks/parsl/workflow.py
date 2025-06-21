@@ -17,7 +17,7 @@ import os
 @bash_app
 def stage1_app(inpFile_path: str, f1: int, f2: int, freq: int, out_path: str, outputs,
                stdout: str = 'stdout_stage1.txt', stderr: str = 'stderr_stage1.txt'):
-    script_path = "/home/mu2so4/univ/disser/cwl-pure/task1.py"
+    script_path = "../../src/task1.py"
     
     # CWL указывает позиционные аргументы: inpFile, f1, f2, freq, outPath
     return f"python {script_path} {inpFile_path} {f1} {f2} {freq} {out_path}"
@@ -26,7 +26,7 @@ def stage1_app(inpFile_path: str, f1: int, f2: int, freq: int, out_path: str, ou
 @bash_app
 def stage2_app(filename: File, freq2: int, freq3: int, out_pic_path: str, out_file_path: str, outputs,
                stdout: str = 'stdout_stage2.txt', stderr: str = 'stderr_stage2.txt'):
-    script_path = "/home/mu2so4/univ/disser/cwl-pure/task2.py"
+    script_path = "../../src/task2.py"
 
     # CWL указывает позиционные аргументы: filename, freq2, freq3, outPic, outFile
     # Parsl автоматически позаботится о том, чтобы filename.filepath указывал на правильный файл

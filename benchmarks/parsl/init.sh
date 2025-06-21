@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd $(dirname "$0")
+
 LOCKFILE="lockfile"
 
 if [[ -f $LOCKFILE ]]; then
@@ -21,9 +23,7 @@ fi
 
 source $VENV_PATH/bin/activate
 pip install parsl==2025.5.19 pyyaml==6.0.2
-pip install -r ../requirements.txt
-
-cp ../cwltool/params.yml .
+pip install -r ../../requirements.txt
 
 touch $LOCKFILE
 
