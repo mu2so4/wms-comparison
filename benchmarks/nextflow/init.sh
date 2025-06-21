@@ -45,6 +45,9 @@ sed "s#INPUT_FILE#${INPUT_FILE}#g" nextflow-draft.config > nextflow.config
 sed "s#SRC_PATH#${SRC_DIR}#g" task1-draft.nf > task1.nf
 sed "s#SRC_PATH#${SRC_DIR}#g" task2-draft.nf > task2.nf
 
+cd ../apptainer
+sed "s#INPUT_FILE#${INPUT_FILE}#g" nextflow-draft.config > nextflow.config
+
 cd ..
 
 touch $LOCKFILE

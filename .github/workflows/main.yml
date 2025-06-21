@@ -91,7 +91,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        wms: [native, cwltool]
+        wms: [native, cwltool, nextflow]
     steps:
       - uses: actions/checkout@v4
 
@@ -110,7 +110,7 @@ jobs:
 
       - name: Run ${{ matrix.wms }} workflow
         run: |
-          chmod +x benchmarks/${{ matrix.wms }}/init.sh benchmarks/${{ matrix.wms }}/run.sh
+          chmod +x benchmarks/${{ matrix.wms }}/init.sh benchmarks/${{ matrix.wms }}/run-singularity.sh
           ./benchmarks/${{ matrix.wms }}/init.sh
-          ./benchmarks/${{ matrix.wms }}/run-docker.sh
+          ./benchmarks/${{ matrix.wms }}/run-singularity.sh
 
