@@ -33,13 +33,13 @@ jobs:
           retention-days: 7
 
   native:
-    name: Native (venv) run
+    name: Containerless run
     needs: download-data
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        wms: [native, cwltool, fireworks, luigi, parsl]
+        wms: [native, cwltool, fireworks, luigi, parsl, snakemake]
     steps:
       - uses: actions/checkout@v4
 

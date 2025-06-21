@@ -1,0 +1,9 @@
+inpFile: ../../inputs/input.sgy
+f1: 15
+f2: 30
+freq: 20
+freq2: 40
+freq3: 50
+out_stage1: out/filtered2.sd
+out_pic: out/out_fin.png
+out_segy: out/filtered.segy

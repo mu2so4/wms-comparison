@@ -1,7 +1,7 @@
 # Snakefile для запуска рабочего процесса, эквивалентного workflow.cwl
 
 # Загрузка параметров из YAML файла
-configfile: "../cwltool/params.yml"
+configfile: "params.yml"
 
 # Определение целевых файлов рабочего процесса
 # Это файлы, которые Snakemake попытается создать по умолчанию
@@ -23,7 +23,7 @@ rule stage1:
         # {input.inp_file} - путь к входному файлу
         # {config[f1]}, {config[f2]}, {config[freq]} - параметры из конфигурации
         # {output} - путь к выходному файлу этого правила
-        "python ../task1.py "
+        "python ../../src/task1.py "
         "{input.inp_file} "
         "{config[f1]} "
         "{config[f2]} "
@@ -45,7 +45,7 @@ rule stage2:
         # {config[freq2]}, {config[freq3]} - параметры из конфигурации
         # {output.pic} - путь к первому выходному файлу этого правила (изображение)
         # {output.segy} - путь ко второму выходному файлу этого правила (segy)
-        "python ../task2.py "
+        "python ../../src/task2.py "
         "{input.stage1_output} "
         "{config[freq2]} "
         "{config[freq3]} "

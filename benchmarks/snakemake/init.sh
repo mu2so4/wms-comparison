@@ -1,5 +1,14 @@
 #!/bin/bash
 
+cd $(dirname "$0")
+
+LOCKFILE="lockfile"
+
+if [[ -f $LOCKFILE ]]; then
+    echo "Init already complete. To init again remove the '$LOCKFILE' file"
+    exit
+fi
+
 VENV_PATH='.snakemake-venv'
 
 set -e
@@ -14,7 +23,9 @@ fi
 
 source $VENV_PATH/bin/activate
 pip install snakemake==9.3.3
-pip install -r ../requirements.txt
+pip install -r ../../requirements.txt
+
+touch $LOCKFILE
 
 set +e
 
