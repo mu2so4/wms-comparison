@@ -1,4 +1,4 @@
-name: Test Native Workflow Run (No WMS)
+name: Test Workflow Run
 
 on:
   push:
@@ -36,6 +36,10 @@ jobs:
     name: Native (venv) run
     needs: download-data
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        wms: [native, cwltool, fireworks, luigi]
     steps:
       - uses: actions/checkout@v4
 
@@ -48,35 +52,52 @@ jobs:
           name: seismic-input
           path: inputs
 
-      - name: Run native workflow
+      - name: Run ${{ matrix.wms }} workflow
         run: |
-          chmod +x benchmarks/native/init.sh benchmarks/native/run.sh
-          ./benchmarks/native/init.sh
-          ./benchmarks/native/run.sh
+          chmod +x benchmarks/${{ matrix.wms }}/init.sh benchmarks/${{ matrix.wms }}/run.sh
+          ./benchmarks/${{ matrix.wms }}/init.sh
+          ./benchmarks/${{ matrix.wms }}/run.sh
 
   docker:
     name: Docker run
     needs: download-data
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        wms: [native, cwltool]
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
       - uses: actions/download-artifact@v4
         with:
           name: seismic-input
           path: inputs
 
-      - name: Run Docker workflow
+      - name: Run ${{ matrix.wms }} workflow
         run: |
-          chmod +x benchmarks/native/run-docker.sh
-          ./benchmarks/native/run-docker.sh
+          chmod +x benchmarks/${{ matrix.wms }}/init.sh benchmarks/${{ matrix.wms }}/run.sh
+          ./benchmarks/${{ matrix.wms }}/init.sh
+          ./benchmarks/${{ matrix.wms }}/run-docker.sh
 
   apptainer:
     name: Apptainer run
     needs: download-data
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        wms: [native, cwltool]
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
       - uses: actions/download-artifact@v4
         with:
@@ -87,8 +108,9 @@ jobs:
         with:
           apptainer-version: 1.3.6
 
-      - name: Run Apptainer workflow
+      - name: Run ${{ matrix.wms }} workflow
         run: |
-          chmod +x benchmarks/native/run-singularity.sh
-          ./benchmarks/native/run-singularity.sh
+          chmod +x benchmarks/${{ matrix.wms }}/init.sh benchmarks/${{ matrix.wms }}/run.sh
+          ./benchmarks/${{ matrix.wms }}/init.sh
+          ./benchmarks/${{ matrix.wms }}/run-docker.sh
 
