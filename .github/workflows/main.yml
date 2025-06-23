@@ -76,6 +76,31 @@ jobs:
           chmod +x benchmarks/${{ matrix.wms }}/init.sh benchmarks/${{ matrix.wms }}/run.sh
           ./benchmarks/${{ matrix.wms }}/init.sh
           ./benchmarks/${{ matrix.wms }}/run.sh
+          
+  native-benchmark:
+    name: Containerless benchmark run
+    needs: download-data
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        wms: [native]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: seismic-input
+          path: inputs
+
+      - name: Run ${{ matrix.wms }} workflow
+        run: |
+          chmod +x benchmarks/${{ matrix.wms }}/benchmark.sh benchmarks/${{ matrix.wms }}/init.sh
+          ./benchmarks/${{ matrix.wms }}/benchmark.sh
 
   docker:
     name: Docker run
@@ -102,6 +127,32 @@ jobs:
           chmod +x benchmarks/${{ matrix.wms }}/init.sh benchmarks/${{ matrix.wms }}/run.sh
           ./benchmarks/${{ matrix.wms }}/init.sh
           ./benchmarks/${{ matrix.wms }}/run-docker.sh
+  
+  docker-benchmark:
+    name: Docker benchmark run
+    needs: download-data
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        wms: [native]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: seismic-input
+          path: inputs
+
+      - name: Run ${{ matrix.wms }} workflow
+        run: |
+          chmod +x benchmarks/${{ matrix.wms }}/init.sh benchmarks/${{ matrix.wms }}/benchmark-docker.sh
+          ./benchmarks/${{ matrix.wms }}/init.sh
+          ./benchmarks/${{ matrix.wms }}/benchmark-docker.sh
 
   apptainer:
     name: Apptainer run
