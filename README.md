@@ -1,48 +1,113 @@
-# 📘 Описание
-Этот репозиторий содержит скрипты и инструкции для запуска одного и того же тестового workflow (рабочего процесса) с использованием различных систем управления рабочими задачами (Workflow Management Systems, WMS). Цель — провести сравнительный анализ этих систем на практике: насколько просто настроить, какова производительность, удобство использования и совместимость с форматом CWL (Common Workflow Language).
+# A Comparative Analysis of Workflow Management Systems
 
-# 🔬 Описание кейса
-В качестве тестового кейса используется workflow, который имеет следующую схему:
+[![CI Tests](https://github.com/mu2so4/wms-comparison/actions/workflows/main.yml/badge.svg)](https://github.com/mu2so4/wms-comparison/actions/workflows/main.yml)
+<!--[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://zenodo.org/badge/YOUR_ZENODO_DOI.svg)](https://doi.org/YOUR_ZENODO_DOI)-->
 
-![workflow-scheme](Seismic_demo.jpg)
 
-# 📂 Структура репозитория
-Каждая система представлена в отдельной директории со следующими материалами:
-* Скрипты для запуска кейса «с нуля»
-* Инструкции по установке зависимостей
-* Описание особенностей реализации под конкретный WMS
+## Abstract
 
-# ✅ Подготовленные WMS
-## Cwltool
-Используется скрипт на Common Workflow Language (CWL). Успешно выполнен запуск всего кейса.
+Workflow Management Systems (WMS) are essential for the automated and reproducible processing of data in modern science. However, the large number of available systems presents a significant challenge for researchers in selecting the most suitable tool for a specific task. This project presents a comprehensive comparative analysis of popular WMS.
 
-## Pegasus
-Несмотря на заявленную ограниченную поддержку CWL, запустить кейс с использованием Pegasus не удалось. Более того, при попытках выполнить тот же самый workflow средствами Pegasus, время выполнения оказалось примерно в **20 раз больше**, чем при запуске без использования WMS или с другими системами.
+This repository serves as a practical guide and a fully reproducible artifact for the research. It provides all the necessary code, configuration files, and container images to benchmark these systems on various platforms.
 
-## Luigi
-Workflow переписан в стиле Luigi. Успешный запуск, производительность приемлемая. Важной особенностью является необходимость ручного управления зависимостями между задачами.
+## Benchmarked Workflow Management Systems
 
-## Nextflow
-При помощи библиотеки Janis скрипт, написанный ранее для cwltool, был преобразован в скрипт для Nextflow, который был успешно выполнен. Время выполнения оказалось в 2 раза больше, чем при запуске без использования WMS.
+The following nine systems were evaluated:
+1.  **Apache Airflow** (including a setup with the CWL-airflow package)
+2.  **cwltool** (the reference implementation for the Common Workflow Language)
+3.  **Dask**
+4.  **FireWorks**
+5.  **Luigi**
+6.  **Nextflow**
+7.  **Parsl**
+8.  **Pegasus**
+9.  **Snakemake**
 
-## Dask
-Предназначен преимущественно для работы с коллекциями -- `numpy`, `pandas`, -- и `scikit-learn`. Используется Jupyter Notebook. Имеет графический интерфейс. Время выполнения было в 2 раза больше по сравнению с запуском без WMS
+## Benchmarking Methodology
 
-## Apache Airflow с CWL-Apache
-Имеет удобный интерфейс. При помощи CWL-Apache удалось успешно запустить скрипт, написанный ранее для cwltool. Тем не менее, имеет сложную процедуру установки, в которую входит установка двух разных версий Python.
+Our performance tests were conducted based on the following principles:
 
-## Snakemake
-Ориентирована на воспроизводимость и модульность. Кэширует промежуточные результаты. Имеет высокую производительность: время выполнения почти такое же, как и без запуска WMS.
+* **Parameters:** Each benchmark is defined by two parameters: the WMS being tested and the container technology used (None, Docker, or Apptainer).
+* **Warm-up Runs:** We perform 3 initial "warm-up" runs for each case. These runs are not timed and serve to initialize any system caches.
+* **Timed Runs:** Following the warm-up, we execute the workflow 15 times, measuring the execution time for each run. Timing is performed using `time(1)` for CLI-based systems or native WMS timing mechanisms where available.
+* **Cache Suppression:** File caching is disabled where possible to ensure a fair comparison of performance.
+* **Performance Metrics:** The final statistics include:
+    * **Mean Execution Time:** The arithmetic mean of the 15 timed runs.
+    * **Standard Deviation:** The sample standard deviation of the execution time.
+    * **Overhead Coefficient:** The ratio of a case's mean execution time to the mean execution time of the `native` run (no WMS, no containers).
 
-# 🎯 Планируемые к рассмотрению WMS
-* Apache Airflow без CWL-Airflow
-* Galaxy Project
-* GNU Parallel
-* Parsl
-* Fireworks
+## Repository Structure
+```
+.
+├── src/                  # Source code for the test workflow and its dependencies.
+├── cwl/                  # Common Workflow Language (CWL) definitions for the workflow.
+├── images/               # Dockerfiles and build scripts for the workflow task containers.
+├── benchmarks/           # Setup and execution scripts for each WMS and the native baseline.
+├── results/              # Raw output data from individual benchmark runs.
+├── summary/              # Aggregated results and plots generated by the full benchmark script.
+├── .github/              # GitHub Actions workflows for CI testing.
+├── benchmark-full.sh     # Master script to run all benchmarks and generate summary reports.
+├── CONTRIBUTING.md       # Guidelines for contributing to the project.
+├── LICENSE               # Project license.
+└── README.md             # This file.
+```
 
-# 🚀 Как использовать
-Для запуска любого кейса перейдите в соответствующую директорию и следуйте инструкциям в README.md внутри неё. Все кейсы запускаются с нуля, однако некоторые требуют загрузки предварительных данных (ссылки и инструкции приведены в каждом разделе).
+A more detailed look at the key directories:
+* `benchmarks/[wms-name]/`: Contains scripts for each specific WMS.
+    * `init.sh`: Installs the WMS and its dependencies.
+    * `run.sh`: Executes a single workflow run locally.
+    * `run-docker.sh`: Executes a single run using Docker.
+    * `run-singularity.sh`: Executes a single run using Apptainer/Singularity.
+    * `benchmark-*.sh`: Scripts that perform the full benchmark (warm-up + 15 timed runs).
+* `benchmark-full.sh`: This master script iterates through all available benchmarks, runs them, and populates the `summary/` directory with two key files:
+    * A CSV table with the final performance metrics.
+    * Plots (`avg_times.png`, `overheads.png`) visualizing the mean execution times and overheads.
 
-# 🛠 Зависимости и окружение
-Для удобства рекомендуется использовать виртуальное окружение (например, venv или conda). Некоторые фреймворки могут требовать Docker.
+## Prerequisites
+
+To run all benchmarks, you will need the following software installed:
+1.  **Python 3.11** (Note: The `cwl-airflow` setup for Apache Airflow specifically requires **Python 3.8**).
+2.  **Docker**
+3.  **Apptainer** (or SingularityCE)
+
+## Quick Start Guide
+
+#### 1. Running a Single Case
+
+To set up and run a specific WMS configuration:
+
+1.  **Navigate to the WMS directory:**
+    ```bash
+    cd benchmarks/nextflow # Example for Nextflow
+    ```
+2.  **Run the desired script.** The `init.sh` setup script will be called automatically if needed.
+    * For a single local run: `bash ./run.sh`
+    * For a single Docker run: `bash ./run-docker.sh`
+    * For a benchmark: `bash ./benchmark.sh`
+
+#### 2. Running the Full Benchmark Suite
+
+To execute all benchmarks for all systems and generate the final summary reports:
+
+1.  **Navigate to the project root.**
+2.  **Execute the master script:**
+    ```bash
+    bash ./benchmark-full.sh
+    ```
+3.  **Check the results.** The aggregated data and plots will be available in the `summary/` directory.
+
+## How to Cite
+
+*TODO: Add paper citation details once published.*
+
+To cite this repository directly, please use the DOI provided by Zenodo:
+
+*TODO: Add Zenodo DOI link.*
+
+## Contributing
+
+Contributions are welcome! Please read our `CONTRIBUTING.md` file for guidelines on how to add a new WMS, report issues, or suggest enhancements.
+
+## License
+
