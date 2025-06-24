@@ -6,7 +6,7 @@ set -e
 
 ./init.sh
 
-CLEAN_CMD="rm -rf outputs"
+CLEAN_CMD="rm -rf outputs work"
 EXEC_CMD="./bin/nextflow run native/main.nf"
 
 source .nextflow-venv/bin/activate

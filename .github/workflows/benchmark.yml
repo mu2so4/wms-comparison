@@ -121,4 +121,50 @@ jobs:
           chmod +x benchmarks/${{ matrix.wms }}/init.sh benchmarks/${{ matrix.wms }}/benchmark-singularity.sh
           ./benchmarks/${{ matrix.wms }}/init.sh
           ./benchmarks/${{ matrix.wms }}/benchmark-singularity.sh
+          
+  full-benchmark:
+    name: Full Benchmark Run and Summary
+    needs: [native, docker, apptainer]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: seismic-input
+          path: inputs
+
+      - uses: eWaterCycle/setup-apptainer@v2
+        with:
+          apptainer-version: 1.3.6
+
+      - name: Run Full Benchmark and Summarize
+        run: |
+          chmod +x benchmark-full.sh
+          ./benchmark-full.sh
+          
+      - name: Save table summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: summary
+          path: summary/summary.csv
+          retention-days: 7
+          
+      - name: Save average times
+        uses: actions/upload-artifact@v4
+        with:
+          name: average-times
+          path: summary/avg_times.png
+          retention-days: 7
+          
+      - name: Save speedups
+        uses: actions/upload-artifact@v4
+        with:
+          name: speedups
+          path: summary/speedups.png
+          retention-days: 7
 

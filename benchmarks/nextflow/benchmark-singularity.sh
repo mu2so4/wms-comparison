@@ -6,7 +6,7 @@ set -e
 
 ./init.sh
 
-CLEAN_CMD="rm -rf outputs"
+CLEAN_CMD="rm -rf outputs work"
 EXEC_CMD="./bin/nextflow run apptainer/main.nf"
 
 source ../benchmark-utils.sh
