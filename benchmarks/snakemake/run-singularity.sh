@@ -2,13 +2,9 @@
 
 cd $(dirname "$0")
 
-LOCKFILE="lockfile"
-
 set -e
 
-if [[ ! -f $LOCKFILE ]]; then
-    ./init.sh
-fi
+./init.sh
 
 source .snakemake-venv/bin/activate
 

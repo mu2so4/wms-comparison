@@ -6,6 +6,8 @@ set -e
 
 ./init.sh
 
+mkdir -p out
+
 CLEAN_CMD="rm -f filtered2.sd out_fin.png filtered.segy"
 EXEC_CMD="python workflow.py"
 

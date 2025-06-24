@@ -47,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        wms: [native, cwltool, fireworks, luigi, nextflow, parsl]
+        wms: [native, cwltool, fireworks, luigi, nextflow, parsl, snakemake]
     steps:
       - uses: actions/checkout@v4
 
@@ -99,7 +99,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        wms: [native, cwltool, nextflow]
+        wms: [native, cwltool, nextflow, snakemake]
     steps:
       - uses: actions/checkout@v4
 

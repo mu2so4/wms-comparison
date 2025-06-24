@@ -2,8 +2,6 @@
 
 cd $(dirname "$0")
 
-LOCKFILE="lockfile"
-
 set -e
 
 ./init.sh
