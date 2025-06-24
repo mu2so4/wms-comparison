@@ -27,9 +27,10 @@ run_benchmark() {
     done
 
     # Result processing
+    mkdir -p ../../results
     benchmark_output=../../results/${wms_name}-${container_platform}.txt
     sed "s#,#.#g" "$OUT_FILE" > $benchmark_output
     rm "$OUT_FILE"
     
-    python ../stats.py $benchmark_output
+    python ../../stats.py $benchmark_output
 }

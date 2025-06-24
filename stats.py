@@ -13,9 +13,9 @@ if __name__ == '__main__':
     with open(sys.argv[1], 'r') as f:
         for index, line in enumerate(f):
             if index == wms_index:
-                wms_name = line
+                wms_name = line[:-1]
             elif index == container_platform_index:
-                container_platform_name = line
+                container_platform_name = line[:-1]
             else:
                 numbers.append(float(line))
     
