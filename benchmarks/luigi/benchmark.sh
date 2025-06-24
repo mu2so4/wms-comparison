@@ -12,4 +12,4 @@ EXEC_CMD="python -m main StageTwo --local-scheduler"
 source .luigi-venv/bin/activate
 source ../benchmark-utils.sh
 
-run_benchmark FireWorks Local "$EXEC_CMD" "$CLEAN_CMD"
+run_benchmark Luigi Local "$EXEC_CMD" "$CLEAN_CMD"
