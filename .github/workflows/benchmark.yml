@@ -47,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        wms: [native, cwltool]
+        wms: [native, cwltool, fireworks]
     steps:
       - uses: actions/checkout@v4
 

@@ -11,4 +11,4 @@ EXEC_CMD="cwltool --singularity ../../cwl/containered/workflow.cwl params-contai
 source .cwltool-venv/bin/activate
 source ../benchmark-utils.sh
 
-run_benchmark cwltool Local "$EXEC_CMD"
+run_benchmark cwltool Singularity "$EXEC_CMD"

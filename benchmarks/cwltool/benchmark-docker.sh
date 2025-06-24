@@ -11,4 +11,4 @@ EXEC_CMD="cwltool ../../cwl/containered/workflow.cwl params-containered.yml"
 source .cwltool-venv/bin/activate
 source ../benchmark-utils.sh
 
-run_benchmark cwltool Local "$EXEC_CMD"
+run_benchmark cwltool Docker "$EXEC_CMD"
