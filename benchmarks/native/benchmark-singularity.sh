@@ -26,4 +26,4 @@ SINGULARITY_PROCESS_CMD="singularity run \
 FULL_CMD="${SINGULARITY_FILTER_CMD} && ${SINGULARITY_PROCESS_CMD}"
 
 source ../benchmark-utils.sh
-run_benchmark Native Docker "$FULL_CMD"
+run_benchmark Native Singularity "$FULL_CMD"

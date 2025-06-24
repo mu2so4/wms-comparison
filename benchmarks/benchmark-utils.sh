@@ -23,7 +23,7 @@ run_benchmark() {
     # Main run
     for ((i = 1; i <= $iteration_count; i++)); do
         echo "iteration $i of $iteration_count"
-        { time eval "$cmd"; } 2>>"$OUT_FILE"
+        { time eval "$cmd"; } 2>&1 >/dev/null | tail -1 >>$OUT_FILE
     done
 
     # Result processing
