@@ -12,7 +12,11 @@ BENCHMARK_COUNT=$(find benchmarks/*/benchmark*.sh | wc -l)
 
 INDEX=1
 for BENCHMARK in $BENCHMARKS; do
+    echo
+    echo '-----------------------------------------------------------------------'
     echo "Benchmark $INDEX of $BENCHMARK_COUNT: $BENCHMARK"
+    echo '-----------------------------------------------------------------------'
+    echo
     bash $BENCHMARK
     INDEX=$(expr ${INDEX} + 1)
 done

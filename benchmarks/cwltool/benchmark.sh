@@ -11,4 +11,4 @@ EXEC_CMD="cwltool ../../cwl/native/workflow.cwl params.yml"
 source .cwltool-venv/bin/activate
 source ../benchmark-utils.sh
 
-run_benchmark cwltool Local "$EXEC_CMD"
+run_benchmark Cwltool Local "$EXEC_CMD"

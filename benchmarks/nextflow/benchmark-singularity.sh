@@ -11,4 +11,4 @@ EXEC_CMD="./bin/nextflow run apptainer/main.nf"
 
 source ../benchmark-utils.sh
 
-run_benchmark Nextflow Local "$EXEC_CMD" "$CLEAN_CMD"
+run_benchmark Nextflow Singularity "$EXEC_CMD" "$CLEAN_CMD"

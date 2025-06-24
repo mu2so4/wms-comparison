@@ -10,8 +10,6 @@ if [[ ! -f $LOCKFILE ]]; then
     ./init.sh
 fi
 
-source .nextflow-venv/bin/activate
-
 ./bin/nextflow run apptainer/main.nf
 
 set +e

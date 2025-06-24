@@ -12,4 +12,4 @@ EXEC_CMD="snakemake --snakefile container/Snakefile --cores 1 --quiet --forceall
 source .snakemake-venv/bin/activate
 source ../benchmark-utils.sh
 
-run_benchmark Snakemake Local "$EXEC_CMD" "$CLEAN_CMD"
+run_benchmark Snakemake Singularity "$EXEC_CMD" "$CLEAN_CMD"
