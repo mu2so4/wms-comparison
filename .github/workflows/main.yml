@@ -20,6 +20,13 @@ jobs:
         id: set-key
         run: echo "cache-key=seismic-input-cache" >> $GITHUB_OUTPUT
 
+      - name: Cache seismic input
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: inputs/input.sgy
+          key: ${{ steps.set-key.outputs.cache-key }}
+          
       - name: Download seismic input file
         run: |
           mkdir -p inputs
