@@ -6,9 +6,7 @@ LOCKFILE="lockfile"
 
 set -e
 
-if [[ ! -f $LOCKFILE ]]; then
-    ./init.sh
-fi
+./init.sh
 
 mkdir -p out
 
