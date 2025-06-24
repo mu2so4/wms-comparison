@@ -1,5 +1,6 @@
 *venv*/
 results/
+summary/
 *.pyc
 *.sgy
 *.segy
