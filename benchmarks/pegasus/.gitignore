@@ -3,3 +3,4 @@ output/
 submit/
 *.yml
 *.properties
+workflow_generator.py

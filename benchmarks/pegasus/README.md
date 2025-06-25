@@ -35,6 +35,7 @@ curl -fsSL https://get.htcondor.org | sudo /bin/bash -s -- --no-dry-run
 python3.11 -m venv pegasus-venv
 source pegasus-venv/bin/activate
 pip install -r requirements.txt
+pip install -r ../../requirements.txt
 ```
 
 ---

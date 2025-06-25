@@ -74,7 +74,7 @@ class SplitWorkflow:
         self.tc = TransformationCatalog()
 
         wc = Transformation(
-            "python", site=exec_site_name, pfn="/home/mu2so4/Documents/0Universe/disser/hpc2c-seismics/venv/bin/python", is_stageable=False,
+            "python", site=exec_site_name, pfn="PYTHON_PATH", is_stageable=False,
         )
 
         self.tc.add_transformations(wc)
@@ -85,20 +85,20 @@ class SplitWorkflow:
 
         # Add f.a replica
         self.rc.add_replica(
-            "local", "00000215_276_22_14.18.0.sgy", "/home/mu2so4/univ/disser/hpc2c-seismics/segy/00000215_276_22_14.18.0.sgy"
+            "local", "input.sgy", "INPUT_PATH"
         )
         self.rc.add_replica(
-            "local", "task1.py", "/home/mu2so4/univ/disser/cwl-pure/task1.py"
+            "local", "task1.py", "TASK1_PATH"
         )
         self.rc.add_replica(
-            "local", "task2.py", "/home/mu2so4/univ/disser/cwl-pure/task2.py"
+            "local", "task2.py", "TASK2_PATH"
         )
 
     # --- Create Workflow -----------------------------------------------------
     def create_workflow(self):
         self.wf = Workflow(self.wf_name, infer_dependencies=True)
 
-        sgy = File("00000215_276_22_14.18.0.sgy")
+        sgy = File("input.sgy")
         sdFile = File("filtered2.sd")
         task1 = File("task1.py")
         task2 = File("task2.py")

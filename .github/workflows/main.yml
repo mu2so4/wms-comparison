@@ -46,7 +46,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        wms: [airflow, dask]
+        wms: [airflow, dask, pegasus]
     steps:
       - uses: actions/checkout@v4
 
