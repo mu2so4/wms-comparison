@@ -109,5 +109,5 @@ To cite this repository directly, please use the DOI provided by Zenodo:
 
 Contributions are welcome! Please read our `CONTRIBUTING.md` file for guidelines on how to add a new WMS, report issues, or suggest enhancements.
 
-## License
+<!--## License-->
 
