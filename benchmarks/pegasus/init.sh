@@ -22,11 +22,11 @@ fi
 
 . /etc/os-release
 
-curl https://download.pegasus.isi.edu/pegasus/gpg.txt | apt-key add -
 INSTALL_URL="https://download.pegasus.isi.edu/pegasus/${ID} ${VERSION_CODENAME} main"
-echo "deb ${INSTALL_URL}" >/etc/apt/sources.list.d/pegasus.list
-apt-get update
-apt-get install -y pegasus
+sudo wget -O - https://download.pegasus.isi.edu/pegasus/gpg.txt | sudo apt-key add -
+echo "deb ${INSTALL_URL}" | sudo tee /etc/apt/sources.list.d/pegasus.list
+sudo apt-get update
+sudo apt-get install -y pegasus
 
 source $VENV_PATH/bin/activate
 pip install -r requirements.txt
