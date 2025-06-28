@@ -14,12 +14,19 @@ import os
 # --- Parsl Приложения (Apps) ---
 
 
+def get_filename_and_dirname(filepath: str):
+    full_filename = os.path.abspath(filepath)
+    full_dirname = os.path.dirname(full_filename)
+    filename = os.path.basename(full_filename)
+    return filename, full_dirname
+
 @bash_app
-
-def stage1_app(in_file: str, f1: int, f2: int, freq: int, out_path: str,
-    input_file_dir: str, output_file_dir: str, outputs):
-
-    cmd = f"docker run -v {input_file_dir}:/app/data -v {output_file_dir}:/app/outputs mu2so4/seismic-filter-task:1.0.2 /app/data/{in_file} {f1} {f2} {freq} /app/outputs/{out_path}"
+def stage1_app(in_filename: str, f1: int, f2: int, freq: int, out_filename: str,
+    outputs):
+    input_filename, input_file_dir = get_filename_and_dirname(in_filename)
+    output_filename, output_file_dir = get_filename_and_dirname(out_filename)
+    
+    cmd = f"docker run -v {input_file_dir}:/app/data -v {output_file_dir}:/app/outputs mu2so4/seismic-filter-task:1.0.2 /app/data/{input_filename} {f1} {f2} {freq} /app/outputs/{output_filename}"
     print(f"Running {cmd}")
     return cmd
 
@@ -27,11 +34,15 @@ def stage1_app(in_file: str, f1: int, f2: int, freq: int, out_path: str,
 @bash_app
 def stage2_app(filename: File, freq2: int, freq3: int, out_pic_path: str, out_file_path: str, outputs,
                stdout: str = 'stdout_stage2.txt', stderr: str = 'stderr_stage2.txt'):
-    script_path = "../../src/task2.py"
+    # Parsl автоматически позаботится о том, чтобы filename.filepath указывал на правильный файл
+    input_filename, input_file_dir = get_filename_and_dirname(filename.filepath)
+    output_pic_filename, output_pic_dir = get_filename_and_dirname(out_pic_path)
+    output_segy_filename, _ = get_filename_and_dirname(out_file_path)
 
     # CWL указывает позиционные аргументы: filename, freq2, freq3, outPic, outFile
-    # Parsl автоматически позаботится о том, чтобы filename.filepath указывал на правильный файл
-    return f"python {script_path} {filename.filepath} {freq2} {freq3} {out_pic_path} {out_file_path}"
+    cmd = f"docker run -v {input_file_dir}:/app/data -v {output_pic_dir}:/app/outputs mu2so4/seismic-processing-task:1.0.2 /app/data/{input_filename} {freq2} {freq3} /app/outputs/{output_pic_filename} /app/outputs/{output_segy_filename}"
+    print(f"Running {cmd}")
+    return cmd
 
 # --- Основной рабочий процесс Parsl ---
 def main_workflow(parameters: dict):
@@ -43,17 +54,11 @@ def main_workflow(parameters: dict):
     f2_val = parameters['f2']
     freq_val = parameters['freq']
     out_stage1_file_name = parameters['out_stage1']
-    
-    out_stage1_short = os.path.basename(out_stage1_file_name)
-    abs_input_file_path = os.path.abspath(inp_file)
-    input_filename = os.path.basename(abs_input_file_path)
-    input_dirname = os.path.dirname(abs_input_file_path)
-    out_task1_dirname = os.path.abspath("docker-out-task1")
 
     # Запуск stage1
     # Объявляем out_stage1_file_name как выходной файл, чтобы Parsl мог его отслеживать
-    print(f"Запуск stage1_app: input_filename={input_filename}, f1={f1_val}, f2={f2_val}, freq={freq_val}, outPath={out_stage1_short}, input_dirname={input_dirname}, out_task1_dirname={out_task1_dirname}")
-    stage1_future = stage1_app(input_filename, f1_val, f2_val, freq_val, out_stage1_short, input_dirname, out_task1_dirname,
+    print(f"Запуск stage1_app: inpFile={inp_file}, f1={f1_val}, f2={f2_val}, freq={freq_val}, outPath={out_stage1_file_name}")
+    stage1_future = stage1_app(inp_file, f1_val, f2_val, freq_val, out_stage1_file_name,
                                  outputs=[File(out_stage1_file_name)])
 
     # Параметры для stage2
@@ -86,8 +91,8 @@ def main_workflow(parameters: dict):
 # --- Загрузка параметров и выполнение ---
 if __name__ == "__main__":
     # Проверка наличия файла params.yml
-    if not os.path.exists('params.yml'):
-        print("Ошибка: Файл 'params.yml' не найден в текущей директории.")
+    if not os.path.exists('params-docker.yml'):
+        print("Ошибка: Файл 'params-docker.yml' не найден в текущей директории.")
         exit(1)
 
     # Загрузка параметров из params.yml
