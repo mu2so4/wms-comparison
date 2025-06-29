@@ -47,13 +47,15 @@ def stage2_app(filename: File, freq2: int, freq3: int, out_pic_path: str, out_fi
 # --- Основной рабочий процесс Parsl ---
 def main_workflow(parameters: dict):
     print(f"Запуск workflow с параметрами: {parameters}")
+    out_dir1 = 'out1-docker'
+    out_dir2 = 'out2-docker'
 
     # Параметры для stage1
     inp_file = parameters['inpFile']
     f1_val = parameters['f1']
     f2_val = parameters['f2']
     freq_val = parameters['freq']
-    out_stage1_file_name = parameters['out_stage1']
+    out_stage1_file_name = os.path.join(out_dir1, "filtered.sd")
 
     # Запуск stage1
     # Объявляем out_stage1_file_name как выходной файл, чтобы Parsl мог его отслеживать
@@ -64,8 +66,8 @@ def main_workflow(parameters: dict):
     # Параметры для stage2
     freq2_val = parameters['freq2']
     freq3_val = parameters['freq3']
-    out_pic_file_name = parameters['out_pic']
-    out_segy_file_name = parameters['out_segy']
+    out_pic_file_name = os.path.join(out_dir2, parameters['out_pic'])
+    out_segy_file_name = os.path.join(out_dir2, parameters['out_segy'])
 
     # Запуск stage2
     # Передаем выходной файл из stage1 в качестве входного в stage2.
@@ -91,7 +93,7 @@ def main_workflow(parameters: dict):
 # --- Загрузка параметров и выполнение ---
 if __name__ == "__main__":
     # Проверка наличия файла params.yml
-    if not os.path.exists('params-docker.yml'):
+    if not os.path.exists('params.yml'):
         print("Ошибка: Файл 'params-docker.yml' не найден в текущей директории.")
         exit(1)
 

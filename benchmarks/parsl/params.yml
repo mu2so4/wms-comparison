@@ -4,6 +4,5 @@ f2: 30
 freq: 20
 freq2: 40
 freq3: 50
-out_stage1: out1/filtered2.sd
-out_pic: out2/out_fin.png
-out_segy: out2/filtered.segy
+out_pic: out_fin.png
+out_segy: filtered.segy

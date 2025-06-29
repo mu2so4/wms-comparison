@@ -14,33 +14,41 @@ import os
 # --- Parsl Приложения (Apps) ---
 
 
+def get_filename_and_dirname(filepath: str):
+    full_filename = os.path.abspath(filepath)
+    full_dirname = os.path.dirname(full_filename)
+    filename = os.path.basename(full_filename)
+    return filename, full_dirname
+
 @bash_app
-def stage1_app(inpFile_path: str, f1: int, f2: int, freq: int, out_path: str, outputs,
-               stdout: str = 'stdout_stage1.txt', stderr: str = 'stderr_stage1.txt'):
-    script_path = "../../src/task1.py"
+def stage1_app(in_filename: str, f1: int, f2: int, freq: int, out_filename: str,
+    outputs):
+    input_filename, input_file_dir = get_filename_and_dirname(in_filename)
+    output_filename, output_file_dir = get_filename_and_dirname(out_filename)
     
-    # CWL указывает позиционные аргументы: inpFile, f1, f2, freq, outPath
-    cmd = f"python {script_path} {inpFile_path} {f1} {f2} {freq} {out_path}"
-    print(cmd)
+    cmd = f"singularity run --mount type=bind,src={input_file_dir},dst=/app/data,ro --mount type=bind,src={output_file_dir},dst=/app/outputs docker://mu2so4/seismic-filter-task:1.0.2 /app/data/{input_filename} {f1} {f2} {freq} /app/outputs/{output_filename}"
+    print(f"Running {cmd}")
     return cmd
 
 
 @bash_app
 def stage2_app(filename: File, freq2: int, freq3: int, out_pic_path: str, out_file_path: str, outputs,
                stdout: str = 'stdout_stage2.txt', stderr: str = 'stderr_stage2.txt'):
-    script_path = "../../src/task2.py"
+    # Parsl автоматически позаботится о том, чтобы filename.filepath указывал на правильный файл
+    input_filename, input_file_dir = get_filename_and_dirname(filename.filepath)
+    output_pic_filename, output_pic_dir = get_filename_and_dirname(out_pic_path)
+    output_segy_filename, _ = get_filename_and_dirname(out_file_path)
 
     # CWL указывает позиционные аргументы: filename, freq2, freq3, outPic, outFile
-    # Parsl автоматически позаботится о том, чтобы filename.filepath указывал на правильный файл
-    cmd =  f"python {script_path} {filename.filepath} {freq2} {freq3} {out_pic_path} {out_file_path}"
-    print(cmd)
+    cmd = f"singularity run --mount type=bind,src={input_file_dir},dst=/app/data,ro --mount type=bind,src={output_pic_dir},dst=/app/outputs docker://mu2so4/seismic-processing-task:1.0.2 /app/data/{input_filename} {freq2} {freq3} /app/outputs/{output_pic_filename} /app/outputs/{output_segy_filename}"
+    print(f"Running {cmd}")
     return cmd
 
 # --- Основной рабочий процесс Parsl ---
 def main_workflow(parameters: dict):
     print(f"Запуск workflow с параметрами: {parameters}")
-    out_dir1 = 'out1'
-    out_dir2 = 'out2'
+    out_dir1 = 'out1-singularity'
+    out_dir2 = 'out2-singularity'
     os.makedirs(out_dir1, exist_ok=True)
     os.makedirs(out_dir2, exist_ok=True)
 
@@ -88,7 +96,7 @@ def main_workflow(parameters: dict):
 if __name__ == "__main__":
     # Проверка наличия файла params.yml
     if not os.path.exists('params.yml'):
-        print("Ошибка: Файл 'params.yml' не найден в текущей директории.")
+        print("Ошибка: Файл 'params-docker.yml' не найден в текущей директории.")
         exit(1)
 
     # Загрузка параметров из params.yml
@@ -110,6 +118,5 @@ if __name__ == "__main__":
     #except Exception as e:
     #    print(f"Произошла ошибка во время выполнения рабочего процесса Parsl: {e}")
     #finally:
-        # Очистка ресурсов Parsl
-        #parsl.cleanup()
+    #    parsl.cleanup()
     #    print("Очистка ресурсов Parsl завершена.")
