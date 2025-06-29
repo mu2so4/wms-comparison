@@ -1,19 +1,25 @@
 #!/bin/bash
 
-INIT_FILE="init-complete"
+INIT_FILE="lockfile"
 
 if [[ -f $INIT_FILE ]]; then
-    echo "Init already complete. To reinit pleas remove the $INIT_FILE file"
+    echo "Init already complete. To init again remove the '$INIT_FILE' file"
     exit
 fi
 
 set -e
-set -x
 
 # setup tasks environment
-TASK_VENV_PATH="airflow-task-venv"
-rm -rf $TASK_VENV_PATH
-python3.11 -m venv $TASK_VENV_PATH
+TASK_VENV_PATH=".airflow-task-venv"
+
+if [ ! -d $TASK_VENV_PATH ]; then
+    echo "Creating the Apache Airflow tasks virtual environment..."
+    python3.11 -m venv $TASK_VENV_PATH
+else
+    echo "The Apache Airflow tasks virtual environment already exists. Initialization of venv skipped."
+fi
+
+echo "Installing tasks dependencies"
 source $TASK_VENV_PATH/bin/activate
 pip install -r ../requirements.txt
 deactivate
@@ -28,9 +34,15 @@ sed "s#python#${PYTHON_TASK_PATH}#g" ../cwltool/task1.cwl > task1.cwl
 sed "s#python#${PYTHON_TASK_PATH}#g" ../cwltool/task2.cwl > task2.cwl
 
 # setup airflow environment
-VENV_PATH="airflow-venv"
-rm -rf $VENV_PATH
-python3.8 -m venv $VENV_PATH
+VENV_PATH=".airflow-venv"
+if [ ! -d $VENV_PATH ]; then
+    echo "Creating the Apache Airflow virtual environment..."
+    python3.8 -m venv $VENV_PATH
+else
+    echo "The Apache Airflow virtual environment already exists. Initialization of venv skipped."
+fi
+
+echo "Installing Apache Airflow and CWL-Airflow"
 source $VENV_PATH/bin/activate
 pip install cwl-airflow==1.2.11 --constraint \
     "https://raw.githubusercontent.com/Barski-lab/cwl-airflow/master/packaging/constraints/constraints-3.8.txt"
@@ -53,12 +65,11 @@ sed "s#WORKFLOW_PATH#${WORKFLOW_PATH}#g" seismic_demo.py | sed "s#PARAM_PATH#${P
 
 touch $INIT_FILE
 
-set +x
 set +e
 
 echo "Apache Airflow and CWL-Airflow initialized successfully!"
 echo
-echo "To deploy Apache Airflow, do this:"
+echo "To deploy Apache Airflow, run this:"
 echo "In terminal 1:"
 echo "source $VENV_PATH/bin/activate"
 echo "airflow scheduler"
@@ -67,4 +78,4 @@ echo "In terminal 2:"
 echo "source $VENV_PATH/bin/activate"
 echo "airflow webserver"
 echo
-echo "Now you can open Airflow at localhost:8080"
+echo "Then you can open Airflow at localhost:8080"

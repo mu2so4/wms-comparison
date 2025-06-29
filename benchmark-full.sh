@@ -5,7 +5,7 @@ cd $(dirname "$0")
 
 rm -rf results
 
-mkdir -p results
+./install.sh
 
 BENCHMARKS=$(find benchmarks/*/benchmark*.sh)
 BENCHMARK_COUNT=$(find benchmarks/*/benchmark*.sh | wc -l)
