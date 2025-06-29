@@ -16,7 +16,7 @@ INDEX=1
 for INSTALL_CMD in $INSTALL_LIST; do
     echo
     echo '-----------------------------------------------------------------------'
-    echo "Installation $INDEX of $BENCHMARK_COUNT: $INSTALL_CMD"
+    echo "Installation $INDEX of $INSTALL_COUNT: $INSTALL_CMD"
     echo '-----------------------------------------------------------------------'
     echo
     bash $INSTALL_CMD
