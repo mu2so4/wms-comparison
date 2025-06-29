@@ -8,6 +8,6 @@ set -e
 
 source .parsl-venv/bin/activate
 
-python workflow.py
+python workflow-docker.py
 
 set +e

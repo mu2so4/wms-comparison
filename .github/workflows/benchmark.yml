@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/*
   pull_request:
     branches:
       - main
@@ -72,7 +73,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        wms: [native, cwltool]
+        wms: [native, cwltool, parsl]
     steps:
       - uses: actions/checkout@v4
 
@@ -98,7 +99,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        wms: [native, cwltool, nextflow, snakemake]
+        wms: [native, cwltool, nextflow, parsl, snakemake]
     steps:
       - uses: actions/checkout@v4
 

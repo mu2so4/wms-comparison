@@ -7,9 +7,9 @@ set -e
 ./init.sh
 
 CLEAN_CMD="rm -rf out*"
-EXEC_CMD="python workflow.py"
+EXEC_CMD="python workflow-singularity.py"
 
 source .parsl-venv/bin/activate
 source ../benchmark-utils.sh
 
-run_benchmark Parsl Local "$EXEC_CMD" "$CLEAN_CMD"
+run_benchmark Parsl Singularity "$EXEC_CMD" "$CLEAN_CMD"
