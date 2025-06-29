@@ -1,62 +1,82 @@
-# CWLTool Workflow Demo
+# cwltool
 
-## 🧩 Описание
+| Characteristic      | Value                                                                             |
+| ------------------- | --------------------------------------------------------------------------------- |
+| Primary Language    | CWL                                                                               |
+| Paradigm            | Data-flow (defined by CWL)                                                        |
+| CWL Support         | **Reference Implementation**                                                      |
+| Docker Support      | [Native](https://www.commonwl.org/user_guide/topics/best-practices.html)          |
+| Apptainer Support   | [Native](https://www.commonwl.org/user_guide/topics/best-practices.html)          |
+| Interface Type      | CLI                                                                               |
+| Remote Access       | No (local execution only)                                                         |
+| Cluster Support     | No                                                                                |
 
-В данном примере используется [**CWLTool**](https://github.com/common-workflow-language/cwltool) — эталонная реализация спецификации **Common Workflow Language (CWL)**. Этот пример демонстрирует запуск тестового workflow, описанного с помощью CWL, на практике.
+## Description
 
-### 🔎 Что такое CWL?
+[**cwltool**](https://github.com/common-workflow-language/cwltool) is the official reference implementation of the **Common Workflow Language (CWL)** standard. It is a Python-based tool designed to parse and execute CWL documents.
 
-**Common Workflow Language (CWL)** — это стандарт описания вычислительных workflow на YAML и JSON, ориентированный на воспроизводимость, переносимость и совместимость. CWL поддерживается многими системами управления задачами, включая:
+*Version used in this benchmark: `3.1.20250110105449`*
 
-- **CWLTool** (эталонная реализация)
-- **Toil**
-- **Arvados**
-- **Rabix**
-- **Apache Airflow** (через парсеры)
-- **Pegasus** (ограниченно)
-- **Galaxy Project**
-- и другими
+## Role in this Benchmark
 
-Формат CWL позволяет описывать шаги вычислений и их зависимости независимо от конкретной WMS, что делает его удобным для переноса между платформами.
+As the reference implementation, `cwltool` served as the primary development and validation tool for the CWL documents in this repository. All workflows (`native/` and `containerized/`) were first tested and debugged using `cwltool` to ensure they were syntactically correct and functionally operational before being tested on other Workflow Management Systems.
 
-## ⚙️ Установка и подготовка
+## Installation
 
-> ⚠️ Рекомендуется использовать **Python 3.11+**
-
-1. Установка (Ubuntu/Debian):
-```bash
-sudo apt-get install cwltool
-python3.11 -m venv cwltool-venv
-source cwltool-venv/bin/activate
-pip install -r requirements.txt
-```
-
-2. Укажите абсолютные пути в следующих местах:
-   - В файле `params.yml` в поле `inpFile` — путь до вашего входного `.segy`-файла.
-   - В файлах `task1.cwl` и `task2.cwl` — в разделе `arguments` укажите абсолютные пути до `task1.py` и `task2.py`, находящихся в корне репозитория.
-   - В файле `workflow.cwl`, который является объединением файлов `main.cwl`, `task1.cwl` и `task2.cwl`, таким же образом поменяйте абсолютные пути.
-
-## 🚀 Запуск
-Активация виртуального пространства:
+To install `cwltool` and its dependencies for this benchmark, run the initialization script.
 
 ```bash
-source cwltool-venv/bin/activate  # если окружение ещё не активировано
+bash ./init.sh
 ```
 
-Выполните на выбор одну из этих команд (их выполнение эквивалентно): `cwltool main.cwl params.yml` или `cwltool workflow.cwl params.yml`.
+This script will create a Python virtual environment at `.cwltool-venv` and install the `cwltool` package using `pip`.
 
-В результате будет выполнен workflow из двух последовательных задач (например, `task1.py` и `task2.py`), описанных в `main.cwl` и `workflow.cwl`.
+## Usage
 
-## 📁 Структура проекта
+  * **Local Execution:**
+    ```bash
+    bash ./run.sh
+    ```
+  * **Docker Execution:**
+    ```bash
+    bash ./run-docker.sh
+    ```
+  * **Apptainer / Singularity Execution:**
+    ```bash
+    bash ./run-singularity.sh
+    ```
 
-- `task1.cwl`, `task2.cwl` — описание отдельных задач
-- `main.cwl` — описание общего workflow
-- `params.yml` — входные параметры
-- `task1.py`, `task2.py` — скрипты, выполняемые в рамках задач
-- `README.md` — текущая инструкция
+### Output Structure
 
-## 🌟 Особенности CWLTool
+After a successful run, `cwltool` creates the final workflow output files in the current working directory. It does not create intermediate directories like `work/`.
 
-- ❌ **Нет кэширования**: при каждом запуске все задачи будут выполнены заново, независимо от наличия промежуточных файлов.
-- ✅ **Гибкость**: можно описывать задачи не только на Python, но и на любом языке или инструменте, который можно вызвать из командной строки.
-- ✅ **Портируемость**: спецификации CWL совместимы с другими WMS.
+## Containerized Execution
+
+`cwltool` has excellent native [support](https://www.commonwl.org/user_guide/topics/best-practices.html) for various container platforms. You can switch the container runtime by providing a command-line flag.
+
+#### Executing with Docker (Default)
+
+Docker is the default container runtime. No special flag is needed.
+
+```bash
+cwltool ../../cwl/containerized/workflow.cwl params-containerized.yml
+```
+
+#### Executing with Apptainer / Singularity
+
+To use Apptainer or Singularity, add the `--singularity` flag.
+
+```bash
+cwltool --singularity ../../cwl/containerized/workflow.cwl params-containerized.yml
+```
+
+## Pros & Cons
+
+### Pros
+
+  * **CWL Reference Implementation:** Guarantees the most accurate and up-to-date support for the CWL standard. It is the definitive tool for validating CWL.
+  * **Broad Container Support:** Natively works with a wide range of container platforms, including Docker, Apptainer/Singularity, Podman, and uDocker.
+
+### Cons
+
+  * **No Cluster Orchestration:** `cwltool` is designed for single-machine execution only. It cannot natively distribute tasks across a compute cluster. To run on an HPC system, one would typically need a higher-level tool to submit the `cwltool` command itself as a single cluster job.
