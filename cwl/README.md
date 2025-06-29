@@ -27,11 +27,11 @@ This directory provides two distinct CWL implementations of the benchmark workfl
 ### Native Execution (`native/`)
 This version is designed for running the workflow tasks directly on the host machine. The `CommandLineTool` definitions invoke the Python interpreter and scripts located in the `src/` directory.
 
-### Containerized Execution (`containered/`)
+### Containerized Execution (`containerized/`)
 This version is designed for running the workflow tasks inside containers. The `CommandLineTool` definitions in this variant include a `DockerRequirement` directive, pointing to the pre-built images on Docker Hub. This allows any container-aware WMS to pull the correct image (for Docker or Apptainer/Singularity) and execute the task within it.
 
 ## Directory Structure
-The contents of the `native/` and `containered/` subdirectories are identical in structure:
+The contents of the `native/` and `containerized/` subdirectories are identical in structure:
 
 * **`task1.cwl` & `task2.cwl`**: These files define the individual steps of the workflow as `CommandLineTool`s. They specify the command, inputs, and outputs for each task.
 * **`workflow.cwl`**: This is the main workflow file. It imports `task1.cwl` and `task2.cwl` and chains them together, defining the data flow from the workflow inputs, through `task1`, and into `task2`.
@@ -49,5 +49,5 @@ cwltool native/workflow.cwl native/params.yml
 
 ```bash
 # To run the containerized version (requires Docker or Apptainer), remove the --singularity key to run via Docker
-cwltool --singularity containered/workflow.cwl containered/params.yml
+cwltool --singularity containerized/workflow.cwl containerized/params.yml
 ```

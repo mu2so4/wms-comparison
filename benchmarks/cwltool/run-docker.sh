@@ -8,6 +8,6 @@ set -e
 
 source .cwltool-venv/bin/activate
 
-cwltool ../../cwl/containered/workflow.cwl params-containered.yml
+cwltool ../../cwl/containerized/workflow.cwl params-containerized.yml
 
 set +e

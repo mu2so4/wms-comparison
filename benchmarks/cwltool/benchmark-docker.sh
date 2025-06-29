@@ -6,7 +6,7 @@ set -e
 
 ./init.sh
 
-EXEC_CMD="cwltool ../../cwl/containered/workflow.cwl params-containered.yml"
+EXEC_CMD="cwltool ../../cwl/containerized/workflow.cwl params-containerized.yml"
 
 source .cwltool-venv/bin/activate
 source ../benchmark-utils.sh
