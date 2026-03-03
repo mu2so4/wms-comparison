@@ -1,0 +1,34 @@
+<tool id="task2" name="Task 2" version="0.1.0">
+  <description>Task 2 seismic processing</description>  
+  <requirements>
+    <requirement type="package" version="1.9.12">segyio</requirement>
+    <requirement type="package" version="=2.2.0">numpy</requirement>
+    <requirement type="package" version="1.14.1">scipy</requirement>
+    <requirement type="package" version="3.10.0">matplotlib</requirement>
+  </requirements>
+  <command>python '$__tool_directory__/task2.py' '$inputPath' '$freq2' '$freq3' '$outPic' '$outFile'</command>
+  <inputs>
+    <param name="inputPath" type="data" label="Source file"/>
+    <param name="freq2" type="integer" value="40" label="freq2 value"/>
+    <param name="freq3" type="integer" value="50" label="freq3 value"/>
+  </inputs>
+  <outputs>
+    <data format="png" name="outPic" />
+    <data format="segy" name="outFile" />
+  </outputs>
+
+  <tests>
+    <test>
+      <param name="inputPath" value="filtered2.sd" ftype="data" />
+      <param name="freq2" value="40" />
+      <param name="freq3" value="50"/>
+      <param name="outPic" value="out_fin.png"/>
+      <param name="outFile" value="filtered.segy"/>
+    </test>
+  </tests>
+
+  <help>
+    This tool processing Task 2.
+  </help>
+
+</tool>

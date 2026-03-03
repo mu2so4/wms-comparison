@@ -1,0 +1,34 @@
+<tool id="task1" name="Task 1" version="0.1.0">
+  <description>Task 1 seismic processing</description>
+  <requirements>
+    <requirement type="package" version="1.9.12">segyio</requirement>
+    <requirement type="package" version="=2.2.0">numpy</requirement>
+    <requirement type="package" version="1.14.1">scipy</requirement>
+    <requirement type="package" version="3.10.0">matplotlib</requirement>
+  </requirements>
+  <command>python '$__tool_directory__/task1.py' '$filename' '$f1' '$f2' '$freq' '$outPath'</command>
+  <inputs>
+    <param name="filename" type="data" label="Source file"/>
+    <param name="f1" type="integer" value="15" label="f1 value"/>
+    <param name="f2" type="integer" value="30" label="f2 value"/>
+    <param name="freq" type="integer" value="20" label="freq value"/>
+  </inputs>
+  <outputs>
+    <data format="data" name="outPath" />
+  </outputs>
+
+  <!-- <tests>
+    <test>
+      <param name="filename" value="source_data.sgy" ftype="sgy" />
+      <param name="f1" value="15"/>
+      <param name="f2" value="30"/>
+      <param name="freq" value="20"/>
+      <output name="outPath" file="filtered2.sd" />
+    </test>
+  </tests> -->
+
+  <help>
+    This tool processing Task 1.
+  </help>
+
+</tool>
