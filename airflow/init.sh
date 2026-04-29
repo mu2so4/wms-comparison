@@ -32,6 +32,11 @@ mkdir -p "${AIRFLOW_HOME}"
 TASK1_PATH=$(realpath ../task1.py)
 TASK2_PATH=$(realpath ../task2.py)
 
+CROP_PATH=$(realpath ../image_processing/crop.py)
+SOBEL_PATH=$(realpath ../image_processing/sobel.py)
+BINARIZE_PATH=$(realpath ../image_processing/binarize.py)
+HEIGHT_PATH=$(realpath ../image_processing/droplet_height.py)
+
 TEMP_PATH=${AIRFLOW_HOME}/temp
 OUT_PATH=${AIRFLOW_HOME}/out
 DAG_PATH=${AIRFLOW_HOME}/dags
@@ -45,6 +50,15 @@ sed "s#TASK1_PATH#${TASK1_PATH}#g" dag-draft.py | \
     sed "s#TEMP_PATH#${TEMP_PATH}#g" | \
     sed "s#OUT_PATH#${OUT_PATH}#g" \
     > ${DAG_PATH}/seismic_demo.py
+
+
+sed "s#CROP_PATH#${CROP_PATH}#g" image-processing-dag.py | \
+    sed "s#SOBEL_PATH#${SOBEL_PATH}#g" | \
+    sed "s#BINARIZE_PATH#${BINARIZE_PATH}#g" | \
+    sed "s#HEIGHT_PATH#${HEIGHT_PATH}#g" | \
+    sed "s#TEMP_PATH#${TEMP_PATH}#g" | \
+    sed "s#OUT_PATH#${OUT_PATH}#g" \
+    > ${DAG_PATH}/image-processing.py
 
 touch $LOCKFILE
 

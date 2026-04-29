@@ -1,0 +1,19 @@
+<tool id="im_proc_sobel" name="Sobel image" version="0.1.0">
+  <description>Applies sobel operator to an image</description>
+  <requirements>
+    <requirement type="package" version="2.22.0">imageio</requirement>
+  </requirements>
+  <command>python '$__tool_directory__/sobel.py' '$input' '$output'</command>
+  <inputs>
+    <param format="jpg" name="input" type="data" label="Source file"/>
+  </inputs>
+  <outputs>
+    <data format="jpg" name="output" />
+  </outputs>
+
+
+  <help>
+    This tool applies horizontal and vertical sobel operator an input image and results in setting magnitude value to each pixel in the input image.
+  </help>
+
+</tool>

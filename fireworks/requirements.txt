@@ -1,2 +1,5 @@
 fireworks[mongomock]==2.0.4
 pytest==8.3.5
+imageio
+numpy
+skipy

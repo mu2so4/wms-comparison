@@ -6,6 +6,7 @@ cp tool_conf.xml.sample ./galaxy/config/
 
 echo "Copping galaxy tools"
 cp -r seismic ./galaxy/tools
+cp -r image_processing ./galaxy/tools
 
 echo "Run galaxy"
 sh ./galaxy/run.sh

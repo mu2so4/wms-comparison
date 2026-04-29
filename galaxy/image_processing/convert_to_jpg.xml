@@ -1,0 +1,19 @@
+<tool id="im_proc_convert_to_jpg" name="Convert data to jpg" version="0.1.0">
+  <description>Converts data file to an image in JPG format</description>
+  <requirements>
+    <requirement type="package" version="2.22.0">imageio</requirement>
+  </requirements>
+  <command>python '$__tool_directory__/convert_to_jpg.py' '$input' '$output'</command>
+  <inputs>
+    <param format="data" name="input" type="data" label="Source file"/>
+  </inputs>
+  <outputs>
+    <data format="jpg" name="output" />
+  </outputs>
+
+
+  <help>
+    This tool converts data file to JPG.
+  </help>
+
+</tool>

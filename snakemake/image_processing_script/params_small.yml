@@ -1,0 +1,27 @@
+binarize_script:
+   class: File
+   path: /home/ilya/Projects/WMSs/wms-comparison/cwltool/image-processing/cwl_tools/binarize.py
+thresh: 50
+crop_script:
+   class: File
+   path: /home/ilya/Projects/WMSs/wms-comparison/cwltool/image-processing/cwl_tools/crop.py
+start_x: 464
+start_y: 193
+crop_x: 169
+crop_y: 154
+sobel_script:
+   class: File
+   path: /home/ilya/Projects/WMSs/wms-comparison/cwltool/image-processing/cwl_tools/sobel.py
+droplet_height_script:
+   class: File
+   path: /home/ilya/Projects/WMSs/wms-comparison/cwltool/image-processing/cwl_tools/droplet_height.py
+height_value_output:
+   class: File
+   path: height.txt
+height_file_output:
+   class: File
+   path: height.png
+images: 
+    - {class: File, path: ../../../image_processing_input_data/10248.jpeg}
+    - {class: File, path: ../../../image_processing_input_data/10157.jpeg}
+    - {class: File, path: ../../../image_processing_input_data/10008.jpeg}

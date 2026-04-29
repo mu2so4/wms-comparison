@@ -1,0 +1,27 @@
+<tool id="im_proc_binarize" name="Binarize image" version="0.1.0">
+  <description>Binarizes an image with specific threshold</description>
+  <requirements>
+    <requirement type="package" version="2.22.0">imageio</requirement>
+  </requirements>
+  <command>python '$__tool_directory__/binarize.py' '$input' '$threshold' '$output'</command>
+  <inputs>
+    <param format="jpg" name="input" type="data" label="Source file"/>
+    <param name="threshold" type="integer" value="50" label="Threshold value"/>
+  </inputs>
+  <outputs>
+    <data format="jpg" name="output" />
+  </outputs>
+
+  <tests>
+    <test>
+      <param name="input" value="1.jpeg" ftype="jpg" />
+      <param name="threshold" value="50" />
+      <output name="output" file="im_proc_binarize.dat" />
+    </test>
+  </tests>
+
+  <help>
+    This tool converts an image to binary using a color threshold.
+  </help>
+
+</tool>

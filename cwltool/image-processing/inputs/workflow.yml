@@ -1,0 +1,24 @@
+binarize_script:
+   class: File
+   path: ../cwl_tools/binarize.py
+thresh: 50
+crop_script:
+   class: File
+   path: ../cwl_tools/crop.py
+start_x: 464
+start_y: 193
+crop_x: 169
+crop_y: 154
+sobel_script:
+   class: File
+   path: ../cwl_tools/sobel.py
+droplet_height_script:
+   class: File
+   path: ../cwl_tools/droplet_height.py
+height_output:
+   class: File
+   path: ../outputs/result.txt
+images: 
+    - {class: File, path: ./input_data/10001.jpeg}
+    - {class: File, path: ./input_data/10002.jpeg}
+    - {class: File, path: ./input_data/10003.jpeg}

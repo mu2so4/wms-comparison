@@ -1,0 +1,48 @@
+fws:
+- fw_id: 1
+  spec:
+    _tasks:
+    - _fw_name: ScriptTask
+      script: python3 /home/ilya/Projects/WMSs/wms-comparison/image_processing/crop.py /home/ilya/Projects/ImageBlobler/apache/input_data/10000.jpeg 464 193 169 154 crop_10000.jpeg
+    - _fw_name: FileTransferTask
+      files:
+      - src: crop_10000.jpeg
+        dest: /home/ilya/Projects/WMSs/wms-comparison/fireworks/outputs_im/crop_10000.jpeg
+      mode: move
+- fw_id: 2
+  spec:
+    _tasks:
+    - _fw_name: ScriptTask
+      script: python3 /home/ilya/Projects/WMSs/wms-comparison/image_processing/sobel.py /home/ilya/Projects/WMSs/wms-comparison/fireworks/outputs_im/crop_10000.jpeg sobel_crop_10000.jpeg
+    - _fw_name: FileTransferTask
+      dest: /home/ilya/Projects/WMSs/wms-comparison/fireworks/outputs_im
+      files:
+      - sobel_crop_10000.jpeg
+      mode: move
+- fw_id: 3
+  spec:
+    _tasks:
+    - _fw_name: ScriptTask
+      script: python3 /home/ilya/Projects/WMSs/wms-comparison/image_processing/binarize.py /home/ilya/Projects/WMSs/wms-comparison/fireworks/outputs_im/sobel_crop_10000.jpeg 50 binarize_sobel_crop_10000.jpeg
+    - _fw_name: FileTransferTask
+      dest: /home/ilya/Projects/WMSs/wms-comparison/fireworks/outputs_im
+      files:
+      - binarize_sobel_crop_10000.jpeg
+      mode: move
+- fw_id: 4
+  spec:
+    _tasks:
+    - _fw_name: ScriptTask
+      script: python3 /home/ilya/Projects/WMSs/wms-comparison/image_processing/droplet_height.py /home/ilya/Projects/WMSs/wms-comparison/fireworks/outputs_im/binarize_sobel_crop_10000.jpeg height_value_binarize_sobel_crop_10000.txt height_binarize_sobel_crop_10000.jpeg
+    - _fw_name: FileTransferTask
+      dest: /home/ilya/Projects/WMSs/wms-comparison/fireworks/outputs_im
+      files:
+      - height_value_binarize_sobel_crop_10000.txt
+      - height_binarize_sobel_crop_10000.jpeg
+      mode: move
+links:
+  1:
+  - 2
+  - 3
+  - 4
+metadata: {}

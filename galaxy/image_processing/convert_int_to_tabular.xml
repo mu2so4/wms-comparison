@@ -1,0 +1,15 @@
+<tool id="im_proc_convert_int_to_tabular" name="Convert int collection to tabular" version="0.1.0">
+  <description>Converts int collection to tabular</description>
+  <command>python '$__tool_directory__/convert_int_to_tabular.py' '$input' '$output'</command>
+  <inputs>
+    <param name="input" type="data" multiple="true" label="Source file"/>
+  </inputs>
+  <outputs>
+    <data format="tabular" name="output" />
+  </outputs>
+  <help>
+    This tool collection with int values to tabular file.
+  </help>
+</tool>
+
+

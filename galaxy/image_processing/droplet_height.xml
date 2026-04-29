@@ -1,0 +1,20 @@
+<tool id="im_proc_droplet_height" name="Droplet height" version="0.1.0">
+  <description>Gets droplet height</description>
+  <requirements>
+    <requirement type="package" version="2.22.0">imageio</requirement>
+  </requirements>
+  <command>python '$__tool_directory__/droplet_height.py' '$input' '$output_value' '$output_image'</command>
+  <inputs>
+    <param format="jpg" name="input" type="data" label="Source file"/>
+  </inputs>
+  <outputs>
+    <data format="int" name="output_value" />
+    <data format="jpg" name="output_image" />
+  </outputs>
+
+
+  <help>
+    This tool calculates height of the droplet in pixels from binary image.
+  </help>
+
+</tool>

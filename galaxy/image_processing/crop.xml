@@ -1,0 +1,23 @@
+<tool id="im_proc_crop" name="Crop image" version="0.1.0">
+  <description>Crops an image</description>
+  <requirements>
+    <requirement type="package" version="2.22.0">imageio</requirement>
+  </requirements>
+  <command>python '$__tool_directory__/crop.py' '$input' '$x' '$y' '$width' '$height' '$output'</command>
+  <inputs>
+    <param format="jpg" name="input" type="data" label="Source file"/>
+    <param name="x" type="integer" value="464" label="Top left X value"/>
+    <param name="y" type="integer" value="193" label="Top left Y value"/>
+    <param name="width" type="integer" value="169" label="Width value"/>
+    <param name="height" type="integer" value="154" label="Height value"/>
+  </inputs>
+  <outputs>
+    <data format="jpg" name="output" />
+  </outputs>
+
+
+  <help>
+    This tool crops an image within rectangle area.
+  </help>
+
+</tool>

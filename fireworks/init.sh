@@ -19,7 +19,7 @@ else
 fi
 
 
-source $VENV_PATH/bin/activate
+. $VENV_PATH/bin/activate
 
 pip install -r requirements.txt
 mkdir -p ~/.fireworks
@@ -31,9 +31,14 @@ pip install -r ../requirements.txt
 
 OUTPUT_DIR=$(realpath outputs)
 REPO_DIR=$(realpath ..)
+OUTPUT_DIR_IP=$(realpath outputs_im)
+REPO_DIR_IP=$(realpath ../image_processing)
 
 sed "s#OUTPUT_DIR#${OUTPUT_DIR}#g" workflow-draft.yaml | \
     sed "s#REPO_DIR#${REPO_DIR}#g" > workflow.yaml
+
+sed "s#OUTPUT_DIR#${OUTPUT_DIR_IP}#g" image-processing-workflow-draft.yaml | \
+    sed "s#REPO_DIR#${REPO_DIR_IP}#g" > image-processing-workflow.yaml
 
 touch $LOCKFILE
 

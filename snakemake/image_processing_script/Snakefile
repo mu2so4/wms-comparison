@@ -1,0 +1,70 @@
+# Snakefile для запуска рабочего процесса, эквивалентного workflow.cwl
+from functools import reduce
+
+# Загрузка параметров из YAML файла
+configfile: "params_small.yml"
+
+def get_next_file_name(prevFile: str, operationName: str):
+        fileSplit = prevFile.split("/")
+        return f"{operationName}_{fileSplit[fileSplit.__len__()-1]}" 
+def get_next_file_name_v2(prevFile: str, operationName: str):
+        fileSplit = prevFile.split("/")
+        return f"{fileSplit[fileSplit.__len__()-1]}" 
+def get_mapped_input_files(wildcards):
+        return list(map(lambda x: x['path'], config['images']))
+def get_mapped_output_files(operation):
+        return list(map(lambda x: get_next_file_name_v2(x['path'], operation), config['images']))
+def get_mapped_output_real_files(operation):
+        return list(map(lambda x: get_next_file_name(x['path'], operation), config['images']))
+def get_mapped_output_real_files_for_files(operation, files):
+        return list(map(lambda x: get_next_file_name(x, operation), files))
+
+def get_shell_crop_cmd(operation):
+      return reduce(lambda acc, inp_file: acc + f" python3 {config['crop_script']['path']} {inp_file['path']} {config['start_x']} {config['start_y']} {config['crop_x']} {config['crop_y']} " + get_next_file_name_v2(inp_file['path'], operation) + "\n", config['images'], "") 
+def get_shell_sobel_cmd(operation, files):
+      return reduce(lambda acc, inp_file: acc + f" python3 {config['sobel_script']['path']} {inp_file} " + get_next_file_name_v2(inp_file, operation) + "\n", files, "") 
+def get_shell_binarize_cmd(operation, files):
+      return reduce(lambda acc, inp_file: acc + f" python3 {config['binarize_script']['path']} {inp_file} {config['thresh']} " + get_next_file_name_v2(inp_file, operation) + "\n", files, "") 
+def get_shell_droplet_height_cmd(operation, files):
+      return reduce(lambda acc, inp_file: acc + f" python3 {config['droplet_height_script']['path']} {inp_file} {inp_file} " + get_next_file_name_v2(inp_file, operation) + "\n", files, "") 
+
+crop_output = get_mapped_output_real_files("crop")
+sobel_output =  get_mapped_output_real_files_for_files("sobel", crop_output)
+binarize_output = get_mapped_output_real_files_for_files("binarize", sobel_output)
+droplet_height_file_output = get_mapped_output_real_files_for_files("droplet_height", binarize_output)
+
+rule all:
+    input:
+        droplet_height_file_output
+
+rule crop:
+    input:
+        inp_files = get_mapped_input_files
+    output:
+        crop_output
+    shell:
+        get_shell_crop_cmd("crop")
+
+rule sobel:
+    input:
+        crop_output
+    output:
+        sobel_output
+    shell:
+        get_shell_sobel_cmd("sobel", crop_output)
+
+rule binarize:
+    input:
+        sobel_output
+    output:
+        binarize_output
+    shell:
+        get_shell_binarize_cmd("binarize", sobel_output)
+
+rule droplet_height:
+    input:
+        binarize_output
+    output:
+        droplet_height_file_output
+    shell:
+        get_shell_droplet_height_cmd("droplet_height", binarize_output)
